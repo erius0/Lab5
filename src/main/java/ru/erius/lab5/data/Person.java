@@ -66,6 +66,9 @@ public class Person implements Comparable<Person> {
      */
     private Location location;
 
+    /**
+     * Конструктор для корректного преобразования человека из xml в объект
+     */
     private Person() {
         this.id = ++existingPeople;
     }
@@ -101,6 +104,12 @@ public class Person implements Comparable<Person> {
         this.setPassportID(passportID);
     }
 
+    /**
+     * Метод, меняющий все значения полей человека (кроме {@link #id} и {@link #creationDate}) в соответствии
+     * со значениями полей другого
+     *
+     * @param newPerson человек, чьи поля будут присвоены текущему
+     */
     public void update(Person newPerson) {
         this.location = newPerson.location;
         this.coordinates = newPerson.coordinates;
@@ -154,7 +163,7 @@ public class Person implements Comparable<Person> {
 
     /**
      * Переопределенный метод сравнения двух людей,
-     * сравнение производится по имени, номеру пасспорта,
+     * сравнение производится по имени, номеру паспорта,
      * росту, национальности, местоположению и цвету глаз
      *
      * @param other Объект для сравнения

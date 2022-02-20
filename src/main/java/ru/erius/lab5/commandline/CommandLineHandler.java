@@ -7,23 +7,30 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class CommandLine {
+/**
+ * Класс обработчика командной строки, реализует шаблон проектирования Singleton,
+ * читает ввод с командной строки, обрабатывает его и вызывает соответствующую команду
+ * на выполнение из регистра команд, используйте метод {@link #start()} для его запуска
+ *
+ * @see CommandRegistry
+ */
+public final class CommandLineHandler {
 
-    private final static CommandLine instance = new CommandLine();
+    private final static CommandLineHandler instance = new CommandLineHandler();
 
     private final Deque<Reader> inputs = new LinkedList<>();
-    private final ArrayList<String> history = new ArrayList<>();
+    private final List<String> history = new LinkedList<>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private boolean isActive = false;
 
     static {
         clearScreen();
-        CommandLine.registerBasicCommands();
+        CommandLineHandler.registerBasicCommands();
     }
 
-    private CommandLine() {}
+    private CommandLineHandler() {}
 
-    public static CommandLine getInstance() {
+    public static CommandLineHandler getInstance() {
         return instance;
     }
 
@@ -36,6 +43,9 @@ public class CommandLine {
                 "execute_script {file_name} : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
     }
 
+    /**
+     * Метод, запускающий обработчик командной строки, для остановки требуется ввести команду "exit"
+     */
     public void start() {
         System.out.println(LongStrings.GREETINGS.getValue());
         this.isActive = true;
@@ -73,6 +83,9 @@ public class CommandLine {
         updateHistory(alias);
     }
 
+    /**
+     * Метод, останавливающий работу обработчика командной строки
+     */
     public void exit() {
         this.isActive = false;
         System.out.println("Выход из программы...");

@@ -1,5 +1,8 @@
 package ru.erius.lab5.collection;
 
+/**
+ * Интерфейс баз данных с методами {@link #load()} и {@link #save()}
+ */
 public interface Database {
 
     void load() throws DatabaseLoadFailedException;

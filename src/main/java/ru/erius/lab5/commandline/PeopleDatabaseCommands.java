@@ -12,15 +12,24 @@ import java.util.Optional;
 
 import static ru.erius.lab5.commandline.CommandRegistry.*;
 
+/**
+ * Класс объявления всех команд, связанных с манипуляциями над объектом класса PeopleDatabase
+ *
+ * @see PeopleDatabase
+ */
 public final class PeopleDatabaseCommands {
 
     private static PeopleDatabase peopleDatabase;
     private static final String COLORS = Arrays.toString(Color.values()),
                                 COUNTRIES = Arrays.toString(Country.values());
-    private static final CommandLine CMD = CommandLine.getInstance();
+    private static final CommandLineHandler CMD = CommandLineHandler.getInstance();
 
     private PeopleDatabaseCommands() {}
 
+    /**
+     * Метод добавления всех команд в регистр команд, обязательно вызывайте его в своей программе,
+     * если вам требуются данные команды
+     */
     public static void registerDatabaseCommands() {
         registerCommand("info", args -> info(peopleDatabase),
                 "info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");

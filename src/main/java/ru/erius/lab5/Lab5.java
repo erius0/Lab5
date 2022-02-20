@@ -2,13 +2,13 @@ package ru.erius.lab5;
 
 import ru.erius.lab5.collection.Database;
 import ru.erius.lab5.collection.PeopleDatabase;
-import ru.erius.lab5.commandline.CommandLine;
+import ru.erius.lab5.commandline.CommandLineHandler;
 import ru.erius.lab5.commandline.PeopleDatabaseCommands;
 
 public class Lab5 {
 
     public static void main(String[] args) {
-        CommandLine cmd = CommandLine.getInstance();
+        CommandLineHandler cmd = CommandLineHandler.getInstance();
 
         PeopleDatabaseCommands.registerDatabaseCommands();
         PeopleDatabase peopleDatabase = new PeopleDatabase();

@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.TreeSet;
 
+/**
+ * Класс базы данных людей, реализующий интерфейс Database
+ * @see ru.erius.lab5.collection.Database
+ */
 @XmlRootElement
 public class PeopleDatabase implements Database {
 
@@ -49,6 +53,13 @@ public class PeopleDatabase implements Database {
                         TYPE, this.initDate, this.collection.size());
     }
 
+    /**
+     * Метод, инициализирующий базу данных из файла, находящемся по пути, указанном в
+     * переменной окружения {@link #ENV_VAR}
+     *
+     * @throws Database.DatabaseLoadFailedException если переменная окружения {@link #ENV_VAR} не задана,
+     * файла не существует, либо отсутствуют права на запись или чтение
+     */
     @Override
     public void load() throws Database.DatabaseLoadFailedException {
         System.out.println("Инициализация коллекции из файла...");
@@ -80,6 +91,14 @@ public class PeopleDatabase implements Database {
         System.out.println("Инициализация успешно выполнена");
     }
 
+    /**
+     * Метод, сохраняющий базу данных в файл, находящемся по пути, указанном в
+     * переменной окружения {@link #ENV_VAR}
+     *
+     * @throws Database.DatabaseSaveFailedException если переменная окружения {@link #ENV_VAR} не задана,
+     * файла не существует, либо отсутствуют права на запись или чтение, или если структура xml файла
+     * была каким-либо образом нарушена
+     */
     @Override
     public void save() throws Database.DatabaseSaveFailedException {
         if (file == null || context == null)

@@ -25,6 +25,10 @@ tasks.compileJava {
     options.encoding = "UTF-8"
 }
 
+tasks.javadoc {
+    options.encoding = "UTF-8"
+}
+
 tasks.jar {
     manifest {
         attributes(
@@ -32,8 +36,4 @@ tasks.jar {
             "Main-Class" to mainClass
         )
     }
-}
-
-tasks.javadoc {
-    options.encoding = "UTF-8"
 }

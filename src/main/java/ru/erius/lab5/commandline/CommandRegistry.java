@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CommandRegistry {
+/**
+ * Класс регистра команд, используемый для добавления, переопределения или удаления команд
+ */
+public final class CommandRegistry {
 
     private static final Map<String, DescriptiveCommand> COMMANDS = new HashMap<>();
 

@@ -1,6 +1,9 @@
 package ru.erius.lab5.util;
 
-public class UtilFunctions {
+/**
+ * Класс функций-утилит для избавления от повторяющихся участков кода и выноса их в методы для общего пользования
+ */
+public final class UtilFunctions {
 
     private UtilFunctions() {}
 
