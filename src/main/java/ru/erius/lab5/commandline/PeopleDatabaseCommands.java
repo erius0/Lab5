@@ -190,13 +190,13 @@ public final class PeopleDatabaseCommands {
         System.out.println("Создание нового объекта класса Person");
         String name = CMD.awaitInput("Введите имя:", "Введите непустую строку",
                 input -> !input.isEmpty());
-        int height = CMD.awaitInput("Введите рост:", "Введите целое число, большее нуля",
+        Integer height = CMD.awaitInput("Введите рост:", "Введите целое число, большее нуля",
                 input -> {
                     Integer result = UtilFunctions.intOrNull(input);
-                    return result != null && result > 0;
-                }, Integer::parseInt);
+                    return result != null && result > 0 || input.isEmpty();
+                }, input -> input.isEmpty() ? null : Integer.parseInt(input));
         String passportID = CMD.awaitInput("Введите номер паспорта:", "Введите минимум 8 символов",
-                input -> input.length() >= 8);
+                input -> input.length() >= 8 || input.isEmpty(), input -> input.isEmpty() ? null : input);
         Color eyeColor = CMD.awaitInput("Введите цвет глаз " + COLORS + ":", "Введите один из предложенных цветов",
                 input -> UtilFunctions.enumOrNull(input.toUpperCase(Locale.ROOT), Color.class) != null,
                 input -> Color.valueOf(input.toUpperCase(Locale.ROOT)));
@@ -217,7 +217,7 @@ public final class PeopleDatabaseCommands {
         long z = CMD.awaitInput("Введите z:", "Введите целое число",
                 input -> UtilFunctions.longOrNull(input) != null, Long::parseLong);
         String name = CMD.awaitInput("Введите название:", "Строка не может быть пустой",
-                input -> !input.isEmpty());
+                input -> true, input -> input.isEmpty() ? null : input);
         return new Location(x, y, z, name);
     }
 

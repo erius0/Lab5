@@ -130,9 +130,9 @@ public class Person implements Comparable<Person> {
      * Если имя является пустой строкой
      */
     public void setName(String name) {
-        this.name = name;
         if (name.isEmpty())
             throw new IllegalArgumentException("Поле name класса Person не может быть null или пустым");
+        this.name = name;
     }
 
     /**
@@ -143,9 +143,9 @@ public class Person implements Comparable<Person> {
      * @throws IllegalArgumentException Если рост меньше 0
      */
     public void setHeight(Integer height) {
-        this.height = height;
-        if (height <= 0)
+        if (height != null && height <= 0)
             throw new IllegalArgumentException("Поле height класса Person должно быть больше 0");
+        this.height = height;
     }
 
     /**
@@ -156,9 +156,9 @@ public class Person implements Comparable<Person> {
      * @throws IllegalArgumentException Если номер паспорта меньше 8 символов в длину
      */
     public void setPassportID(String passportID) {
-        this.passportID = passportID;
-        if (passportID.length() < 8)
+        if (passportID != null && passportID.length() < 8)
             throw new IllegalArgumentException("Поле passportID класса Person не может быть меньше 8 символов в длину");
+        this.passportID = passportID;
     }
 
     /**
