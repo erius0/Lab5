@@ -143,7 +143,7 @@ public final class PeopleDatabaseCommands {
     public static void sumOfHeight(PeopleDatabase peopleDatabase) {
         int sum = peopleDatabase.getCollection()
                 .stream()
-                .mapToInt(Person::getHeight)
+                .mapToInt(p -> p.getHeight() == null ? 0 : p.getHeight())
                 .sum();
         System.out.println("Сумма ростов всех людей в коллекции - " + sum);
     }

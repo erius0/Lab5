@@ -174,8 +174,8 @@ public class Person implements Comparable<Person> {
     @Override
     public int compareTo(Person other) {
         return Comparator.comparing(Person::getName)
-                .thenComparing(Person::getPassportID)
-                .thenComparing(Person::getHeight)
+                .thenComparing(Person::getPassportID, Comparator.nullsFirst(String::compareTo))
+                .thenComparing(Person::getHeight, Comparator.nullsFirst(Integer::compareTo))
                 .thenComparing(Person::getCreationDate)
                 .thenComparing(p -> p.getNationality().toString())
                 .thenComparing(Person::getLocation)
