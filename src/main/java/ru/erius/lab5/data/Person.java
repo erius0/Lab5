@@ -171,12 +171,15 @@ public class Person implements Comparable<Person> {
      */
     @Override
     public int compareTo(Person other) {
-        return Comparator.comparing((Person p) -> p.name)
-                .thenComparing(p -> p.passportID)
-                .thenComparing(p -> p.height)
-                .thenComparing(p -> p.nationality)
-                .thenComparing(p -> p.location)
-                .thenComparing(p -> p.eyeColor)
+        return Comparator.comparing(Person::getName)
+                .thenComparing(Person::getPassportID)
+                .thenComparing(Person::getHeight)
+                .thenComparing(Person::getCreationDate)
+                .thenComparing(p -> p.getNationality().toString())
+                .thenComparing(Person::getLocation)
+                .thenComparing(Person::getCoordinates)
+                .thenComparing(p -> p.getEyeColor().toString())
+                .thenComparing(Person::getId)
                 .compare(this, other);
     }
 }

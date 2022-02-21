@@ -68,7 +68,7 @@ public class Location implements Comparable<Location> {
      */
     @Override
     public int compareTo(Location other) {
-        return Comparator.comparing((Location loc) -> loc.name)
+        return Comparator.comparing(Location::getName)
                 .thenComparing(Location::distance)
                 .compare(this, other);
     }

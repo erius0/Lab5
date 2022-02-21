@@ -9,7 +9,7 @@ import lombok.ToString;
  * Класс данных координат
  */
 @Data @NoArgsConstructor @EqualsAndHashCode @ToString
-public class Coordinates {
+public class Coordinates implements Comparable<Coordinates> {
 
     /**
      * Координата X типа float
@@ -44,5 +44,14 @@ public class Coordinates {
         if (y <= -816)
             throw new IllegalArgumentException("Поле y класса Coordinates должно быть больше -816");
         this.y = y;
+    }
+
+    private double distance() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    @Override
+    public int compareTo(Coordinates other) {
+        return Double.compare(this.distance(), other.distance());
     }
 }
