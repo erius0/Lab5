@@ -15,7 +15,7 @@ public class Lab5 {
         try {
             peopleDatabase.load();
         } catch (Database.DatabaseLoadFailedException e) {
-            e.printStackTrace();
+            System.out.println("Не удалось загрузить коллекцию из файла");
         }
         PeopleDatabaseCommands.setPeopleDatabase(peopleDatabase);
 

@@ -5,10 +5,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  * Класс данных координат
  */
 @Data @NoArgsConstructor @EqualsAndHashCode @ToString
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Coordinates implements Comparable<Coordinates> {
 
     /**

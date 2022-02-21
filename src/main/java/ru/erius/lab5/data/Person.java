@@ -48,10 +48,12 @@ public class Person implements Comparable<Person> {
     /**
      * Рост человека, может быть null, значение поля должно быть больше 0
      */
+    @XmlElement(nillable = true)
     private Integer height;
     /**
      * Номер паспорта человека, длина строки должна быть не меньше 8, поле может быть null
      */
+    @XmlElement(nillable = true)
     private String passportID;
     /**
      * Цвет глаз человека, не может быть null

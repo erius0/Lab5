@@ -2,6 +2,9 @@ package ru.erius.lab5.data;
 
 import lombok.*;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Comparator;
 
 /**
@@ -9,6 +12,7 @@ import java.util.Comparator;
  * по имени и расстоянию до точки (0; 0; 0)
  */
 @Data @NoArgsConstructor @EqualsAndHashCode @ToString
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Location implements Comparable<Location> {
 
     /**
@@ -26,6 +30,7 @@ public class Location implements Comparable<Location> {
     /**
      * Имя локации, может быть null
      */
+    @XmlElement(nillable = true)
     private String name;
 
     /**

@@ -85,10 +85,10 @@ public class PeopleDatabase implements Database {
             PeopleDatabase pd = (PeopleDatabase) unmarshaller.unmarshal(file);
             this.collection = pd.collection;
             this.initDate = pd.initDate;
+            System.out.println("Инициализация успешно выполнена");
         } catch (JAXBException e) {
             throw new DatabaseLoadFailedException("Не удалось загрузить коллекцию из файла %s", file.getPath(), e);
         }
-        System.out.println("Инициализация успешно выполнена");
     }
 
     /**
