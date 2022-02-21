@@ -54,9 +54,9 @@ public class Location implements Comparable<Location> {
      * @throws IllegalArgumentException Если name является пустой строкой
      */
     public void setName(String name) {
-        this.name = name;
-        if (name.isEmpty())
+        if (name != null && name.isEmpty())
             throw new IllegalArgumentException("Поле name класса Location не может быть пустым");
+        this.name = name;
     }
 
     /**

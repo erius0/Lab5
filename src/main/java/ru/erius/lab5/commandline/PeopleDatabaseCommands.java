@@ -190,7 +190,7 @@ public final class PeopleDatabaseCommands {
         System.out.println("Создание нового объекта класса Person");
         String name = CMD.awaitInput("Введите имя:", "Введите непустую строку",
                 input -> !input.isEmpty());
-        int height = CMD.awaitInput("Введите рост:", "Введите целое число, большее нуля",
+        Integer height = CMD.awaitInput("Введите рост:", "Введите целое число, большее нуля",
                 input -> {
                     Integer result = UtilFunctions.intOrNull(input);
                     return result != null && result > 0 || input.isEmpty();

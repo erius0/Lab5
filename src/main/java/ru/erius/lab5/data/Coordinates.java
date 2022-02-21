@@ -41,8 +41,8 @@ public class Coordinates {
      * @throws IllegalArgumentException Если Y меньше или равен -816
      */
     public void setY(float y) {
-        this.y = y;
         if (y <= -816)
             throw new IllegalArgumentException("Поле y класса Coordinates должно быть больше -816");
+        this.y = y;
     }
 }
