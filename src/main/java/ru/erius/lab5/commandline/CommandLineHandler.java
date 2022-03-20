@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Класс обработчика командной строки, реализует шаблон проектирования Singleton,
@@ -19,6 +20,7 @@ public final class CommandLineHandler {
     private final static CommandLineHandler instance = new CommandLineHandler();
 
     private final Deque<Reader> inputs = new LinkedList<>();
+    private final Deque<String> fileNames = new LinkedList<>();
     private final List<String> history = new LinkedList<>();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private boolean isActive = false;
@@ -128,7 +130,7 @@ public final class CommandLineHandler {
             System.out.println("Что-то пошло не так");
             return;
         }
-        addNewInput(streamReader);
+        addNewInput(streamReader, fileName);
     }
 
     private void updateHistory(String command) {
@@ -203,21 +205,19 @@ public final class CommandLineHandler {
         return transform.apply(result);
     }
 
-    /**
-     * Метод, меняющий текущий поток ввода на stream и добавляет его в очередь {@link #inputs inputs}
-     *
-     * @param reader Новый поток ввода
-     */
-    public void addNewInput(Reader reader) {
+    public void addNewInput(Reader reader, String filePath) {
+        if (this.fileNames.contains(filePath)) {
+            System.err.println("Замечена рекурсия, отмена смены потока");
+            return;
+        }
+        this.fileNames.add(filePath);
         this.reader = new BufferedReader(reader);
         this.inputs.add(reader);
     }
 
-    /**
-     * Метод, убирающий текущий поток ввода из очереди {@link #inputs inputs}
-     * и меняющий его либо на следующий в очереди поток, либо на System.in, если очередь пуста
-     */
     public void removeInput() {
+        if (fileNames.size() > 0)
+            fileNames.removeLast();
         inputs.poll();
         Reader reader = inputs.isEmpty() ? new InputStreamReader(System.in) : inputs.peek();
         this.reader = new BufferedReader(reader);

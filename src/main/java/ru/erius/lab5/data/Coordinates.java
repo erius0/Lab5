@@ -45,9 +45,9 @@ public class Coordinates implements Comparable<Coordinates> {
      * @throws IllegalArgumentException Если Y меньше или равен -816
      */
     public void setY(float y) {
-        if (y <= -816)
-            throw new IllegalArgumentException("Поле y класса Coordinates должно быть больше -816");
         this.y = y;
+        if (y <= -816)
+            this.y = 0F;
     }
 
     private double distance() {

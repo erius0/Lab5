@@ -4,7 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import ru.erius.lab5.parser.HeightAdapter;
 import ru.erius.lab5.parser.LocalDateAdapter;
+import ru.erius.lab5.parser.NameAdapter;
+import ru.erius.lab5.parser.PassportAdapter;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -35,6 +38,7 @@ public class Person implements Comparable<Person> {
     /**
      * Имя человека, не может быть null, строка не может быть пустой
      */
+    @XmlJavaTypeAdapter(NameAdapter.class)
     private String name;
     /**
      * Координаты человека, не может быть null
@@ -49,11 +53,13 @@ public class Person implements Comparable<Person> {
      * Рост человека, может быть null, значение поля должно быть больше 0
      */
     @XmlElement(nillable = true)
+    @XmlJavaTypeAdapter(HeightAdapter.class)
     private Integer height;
     /**
      * Номер паспорта человека, длина строки должна быть не меньше 8, поле может быть null
      */
     @XmlElement(nillable = true)
+    @XmlJavaTypeAdapter(PassportAdapter.class)
     private String passportID;
     /**
      * Цвет глаз человека, не может быть null
@@ -132,9 +138,9 @@ public class Person implements Comparable<Person> {
      * Если имя является пустой строкой
      */
     public void setName(String name) {
-        if (name.isEmpty())
-            throw new IllegalArgumentException("Поле name класса Person не может быть null или пустым");
         this.name = name;
+        if (name.isEmpty())
+            this.name = "none";
     }
 
     /**
@@ -145,9 +151,9 @@ public class Person implements Comparable<Person> {
      * @throws IllegalArgumentException Если рост меньше 0
      */
     public void setHeight(Integer height) {
-        if (height != null && height <= 0)
-            throw new IllegalArgumentException("Поле height класса Person должно быть больше 0");
         this.height = height;
+        if (height != null && height <= 0)
+            this.height = 150;
     }
 
     /**
@@ -158,9 +164,9 @@ public class Person implements Comparable<Person> {
      * @throws IllegalArgumentException Если номер паспорта меньше 8 символов в длину
      */
     public void setPassportID(String passportID) {
-        if (passportID != null && passportID.length() < 8)
-            throw new IllegalArgumentException("Поле passportID класса Person не может быть меньше 8 символов в длину");
         this.passportID = passportID;
+        if (passportID != null && passportID.length() < 8)
+            this.passportID = null;
     }
 
     /**

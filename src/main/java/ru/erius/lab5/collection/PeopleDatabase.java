@@ -19,6 +19,7 @@ import java.util.TreeSet;
 
 /**
  * Класс базы данных людей, реализующий интерфейс Database
+ *
  * @see ru.erius.lab5.collection.Database
  */
 @XmlRootElement
@@ -33,9 +34,14 @@ public class PeopleDatabase implements Database {
     private JAXBContext context;
     @XmlTransient
     private File file;
-    @Getter @XmlElement(name = "person")
+    @XmlTransient
+    private String errorMessage;
+    @Getter
+    @XmlElement(name = "person")
     private TreeSet<Person> collection = new TreeSet<>();
-    @Getter @XmlJavaTypeAdapter(LocalDateAdapter.class) @XmlElement(name = "initDate")
+    @Getter
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @XmlElement(name = "initDate")
     private LocalDate initDate = LocalDate.now();
 
     {
@@ -50,7 +56,7 @@ public class PeopleDatabase implements Database {
         return String.format("Тип коллекции: %s \n" +
                         "Дата инициализации: %s \n" +
                         "Количество элементов: %d \n",
-                        TYPE, this.initDate, this.collection.size());
+                TYPE, this.initDate, this.collection.size());
     }
 
     /**
@@ -58,27 +64,35 @@ public class PeopleDatabase implements Database {
      * переменной окружения {@link #ENV_VAR}
      *
      * @throws Database.DatabaseLoadFailedException если переменная окружения {@link #ENV_VAR} не задана,
-     * файла не существует, либо отсутствуют права на запись или чтение
+     *                                              файла не существует, либо отсутствуют права на запись или чтение
      */
     @Override
     public void load() throws Database.DatabaseLoadFailedException {
         System.out.println("Инициализация коллекции из файла...");
 
         String path = System.getenv(ENV_VAR);
-        if (path == null)
+        if (path == null) {
+            errorMessage = "Не найдена переменная окружения LAB5_PATH";
             throw new DatabaseLoadFailedException("Не найдена переменная окружения LAB5_PATH");
-        file = new File(path);
+        }
+        File file = new File(path);
 
-        if (!file.exists())
-            throw new DatabaseLoadFailedException("Файл %s не был найден. Поменяйте значение переменной окружения LAB5_PATH", path);
-        if (!file.canRead())
-            throw new DatabaseLoadFailedException("У вас нет прав на чтение файла %s", path);
-        if (!file.canWrite())
-            throw new DatabaseLoadFailedException("У вас нет прав на запись в файл %s", path);
-        if (file.isFile())
-            System.out.println("Файл успешно найден");
-        else
-            file = createFile(file);
+        if (!file.exists()) {
+            errorMessage = String.format("Файл %s не был найден. Поменяйте значение переменной окружения LAB5_PATH", path);
+            throw new DatabaseLoadFailedException(errorMessage);
+        }
+        if (file.isDirectory())
+                file = createFile(file);
+        if (!file.canRead()) {
+            errorMessage = String.format("У вас нет прав на чтение файла %s", path);
+            throw new DatabaseLoadFailedException(errorMessage);
+        }
+        if (!file.canWrite()) {
+            errorMessage = String.format("У вас нет прав на запись в файл %s", path);
+            throw new DatabaseLoadFailedException(errorMessage);
+        }
+        this.file = file;
+        System.out.println("Файл успешно найден");
 
         try {
             Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -87,7 +101,8 @@ public class PeopleDatabase implements Database {
             this.initDate = pd.initDate;
             System.out.println("Инициализация успешно выполнена");
         } catch (JAXBException e) {
-            throw new DatabaseLoadFailedException("Не удалось загрузить коллекцию из файла %s", file.getPath(), e);
+            e.printStackTrace();
+            throw new DatabaseLoadFailedException("Не удалось загрузить коллекцию из файла %s, он пуст, либо нарушена структура xml", file.getPath(), e);
         }
     }
 
@@ -96,19 +111,19 @@ public class PeopleDatabase implements Database {
      * переменной окружения {@link #ENV_VAR}
      *
      * @throws Database.DatabaseSaveFailedException если переменная окружения {@link #ENV_VAR} не задана,
-     * файла не существует, либо отсутствуют права на запись или чтение, или если структура xml файла
-     * была каким-либо образом нарушена
+     *                                              файла не существует, либо отсутствуют права на запись или чтение, или если структура xml файла
+     *                                              была каким-либо образом нарушена
      */
     @Override
     public void save() throws Database.DatabaseSaveFailedException {
         if (file == null || context == null)
-            throw new DatabaseSaveFailedException("Не удалось сохранить коллекцию");
+            throw new DatabaseSaveFailedException("Не удалось сохранить коллекцию, " + errorMessage);
         try {
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(this, file);
         } catch (JAXBException e) {
-            throw new DatabaseSaveFailedException("Не удалось сохранить коллекцию в файл %s", file.getPath(), e);
+            throw new DatabaseSaveFailedException("Не удалось сохранить коллекцию в файл %s, формат xml файла был нарушен", file.getPath(), e);
         }
     }
 

@@ -1,17 +1,19 @@
 package ru.erius.lab5.data;
 
 import lombok.*;
+import ru.erius.lab5.parser.NameAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Comparator;
 
 /**
  * Класс данных местоположения, реализует сортировку по умолчанию
  * по имени и расстоянию до точки (0; 0; 0)
  */
-@Data @NoArgsConstructor @EqualsAndHashCode @ToString
+@Data @EqualsAndHashCode @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Location implements Comparable<Location> {
 
@@ -31,7 +33,12 @@ public class Location implements Comparable<Location> {
      * Имя локации, может быть null
      */
     @XmlElement(nillable = true)
+    @XmlJavaTypeAdapter(NameAdapter.class)
     private String name;
+
+    private Location() {
+        this.setName(this.name);
+    }
 
     /**
      * Конструктор с параметрами
@@ -59,9 +66,9 @@ public class Location implements Comparable<Location> {
      * @throws IllegalArgumentException Если name является пустой строкой
      */
     public void setName(String name) {
-        if (name != null && name.isEmpty())
-            throw new IllegalArgumentException("Поле name класса Location не может быть пустым");
         this.name = name;
+        if (name != null && name.isEmpty())
+            this.name = null;
     }
 
     /**

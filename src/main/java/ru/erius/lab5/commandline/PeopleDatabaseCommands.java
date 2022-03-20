@@ -113,8 +113,7 @@ public final class PeopleDatabaseCommands {
             peopleDatabase.save();
             System.out.println("Коллекция была успешно сохранена");
         } catch (Database.DatabaseSaveFailedException e) {
-            e.printStackTrace();
-            System.out.println("Не удалось сохранить коллекцию");
+            System.out.println(e.getMessage());
         }
     }
 
