@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Класс базы данных людей, реализующий интерфейс Database
@@ -34,8 +35,6 @@ public class PeopleDatabase implements Database {
     private JAXBContext context;
     @XmlTransient
     private File file;
-    @XmlTransient
-    private String errorMessage;
     @Getter
     @XmlElement(name = "person")
     private TreeSet<Person> collection = new TreeSet<>();
@@ -85,14 +84,10 @@ public class PeopleDatabase implements Database {
         }
         if (file.isDirectory())
             file = createFile(file);
-        if (!file.canRead()) {
-            errorMessage = String.format("У вас нет прав на чтение файла %s", file.getAbsolutePath());
-            throw new DatabaseLoadFailedException(errorMessage);
-        }
-        if (!file.canWrite()) {
-            errorMessage = String.format("У вас нет прав на запись в файл %s", file.getAbsolutePath());
-            throw new DatabaseLoadFailedException(errorMessage);
-        }
+        if (!file.canRead())
+            throw new DatabaseLoadFailedException("У вас нет прав на чтение файла %s", file.getAbsolutePath());
+        if (!file.canWrite())
+            throw new DatabaseLoadFailedException("У вас нет прав на запись в файл %s", file.getAbsolutePath());
         this.file = file;
 
         try {
@@ -117,15 +112,13 @@ public class PeopleDatabase implements Database {
     @Override
     public void save() throws Database.DatabaseSaveFailedException {
         if (!file.exists()) {
-            System.out.println("Файла " + file.getAbsolutePath() + " не существует, ");
-            boolean created;
+            System.out.println("Файла " + file.getAbsolutePath() + " не существует, возможно он был удален, пытаюсь воссоздать файл...");
             try {
-                created = file.createNewFile();
+                file.createNewFile();
+                System.out.println("Файл был успешно создан");
             } catch (IOException e) {
-
+                throw new DatabaseSaveFailedException("Не удается создать файл заново, пожалуйста, сделайте это вручную и попробуйте еще раз");
             }
-            errorMessage = "Файла %s не существует, возможно он был удален";
-            throw new DatabaseSaveFailedException(errorMessage, file.getAbsolutePath());
         }
         try {
             Marshaller marshaller = context.createMarshaller();
@@ -154,9 +147,9 @@ public class PeopleDatabase implements Database {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("PeopleDatabase(\n");
-        this.collection.forEach(p -> sb.append("\t").append(p).append("\n"));
-        sb.append(")");
-        return sb.toString();
+        String result = "PeopleDatabase(";
+        result += this.collection.stream().map(Person::toString).collect(Collectors.joining(", "));
+        result += ")";
+        return result;
     }
 }

@@ -60,10 +60,12 @@ public class Person implements Comparable<Person> {
     /**
      * Цвет глаз человека, не может быть null
      */
+    @XmlJavaTypeAdapter(Adapters.ColorAdapter.class)
     private Color eyeColor;
     /**
      * Национальность человека, не может быть null
      */
+    @XmlJavaTypeAdapter(Adapters.CountryAdapter.class)
     private Country nationality;
     /**
      * Местоположение человека, может быть null
@@ -75,6 +77,14 @@ public class Person implements Comparable<Person> {
      */
     private Person() {
         this.id = ++existingPeople;
+        this.creationDate = Adapters.DEFAULT_DATE;
+        this.name = Adapters.DEFAULT_NAME;
+        this.coordinates = Adapters.DEFAULT_COORDINATES;
+        this.height = Adapters.DEFAULT_HEIGHT;
+        this.passportID = Adapters.DEFAULT_PASSPORT;
+        this.eyeColor = Adapters.DEFAULT_COLOR;
+        this.nationality = Adapters.DEFAULT_COUNTRY;
+        this.location = Adapters.DEFAULT_LOCATION;
     }
 
     /**
@@ -88,14 +98,9 @@ public class Person implements Comparable<Person> {
      * @param nationality Национальность человека
      * @param location Местоположение человека
      *
-     * @throws IllegalArgumentException Если:
-     * name является пустой строкой,
-     * height меньше 0,
-     * Длина passportID меньше 8 символов
-     *
-     * @throws NullPointerException Если coordinates, eyeColor или nationality являются null
+     * @throws NullPointerException Если name, coordinates, eyeColor или nationality являются null
      */
-    public Person(String name, @NonNull Coordinates coordinates, Integer height, String passportID,
+    public Person(@NonNull String name, @NonNull Coordinates coordinates, Integer height, String passportID,
                   @NonNull Color eyeColor, @NonNull Country nationality, Location location) {
         this.id = ++existingPeople;
         this.creationDate = LocalDate.now();
@@ -129,40 +134,54 @@ public class Person implements Comparable<Person> {
      *
      * @param name
      * Имя человека
-     *
-     * @throws IllegalArgumentException
-     * Если имя является пустой строкой
      */
     public void setName(String name) {
         this.name = name;
         if (name.isEmpty())
-            this.name = "none";
+            this.name = Adapters.DEFAULT_NAME;
     }
 
     /**
      * Сеттер для поля height
      *
      * @param height Рост человека
-     *
-     * @throws IllegalArgumentException Если рост меньше 0
      */
     public void setHeight(Integer height) {
         this.height = height;
         if (height != null && height <= 0)
-            this.height = 150;
+            this.height = Adapters.DEFAULT_HEIGHT;
     }
 
     /**
      * Сеттер для поля passportID
      *
      * @param passportID Номер паспорта человека
-     *
-     * @throws IllegalArgumentException Если номер паспорта меньше 8 символов в длину
      */
     public void setPassportID(String passportID) {
         this.passportID = passportID;
         if (passportID != null && passportID.length() < 8)
-            this.passportID = null;
+            this.passportID = Adapters.DEFAULT_PASSPORT;
+    }
+
+    public String formatted() {
+        return String.format("Человек %s:\n" +
+                        "\tИмя: %s\n" +
+                        "\tДата создания: %s\n" +
+                        "\tРост: %s\n" +
+                        "\tНомер паспорта: %s\n" +
+                        "\tЦвет глаз: %s\n" +
+                        "\tНациональность: %s\n" +
+                        "\tМестоположение:\n" +
+                        "\t\tНазвание: %s\n" +
+                        "\t\tX: %s\n" +
+                        "\t\tY: %s\n" +
+                        "\t\tZ: %s\n" +
+                        "\tКоординаты:\n" +
+                        "\t\tX: %s\n" +
+                        "\t\tY: %s\n",
+                        id, name, creationDate, height, passportID, eyeColor, nationality,
+                        location.getName(), location.getX(), location.getY(), location.getZ(),
+                        coordinates.getX(), coordinates.getY());
     }
 
     /**

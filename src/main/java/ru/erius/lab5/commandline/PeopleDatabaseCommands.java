@@ -66,7 +66,8 @@ public final class PeopleDatabaseCommands {
     }
 
     public static void show(PeopleDatabase peopleDatabase) {
-        System.out.println(peopleDatabase);
+        System.out.println("Элементы коллекции:\n");
+        peopleDatabase.getCollection().forEach(p -> System.out.println(p.formatted()));
     }
 
     public static void add(PeopleDatabase peopleDatabase) {

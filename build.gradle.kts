@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "ru.erius"
-version = "1.1"
+version = "1.2"
 val mainClass = "$group.${name.toLowerCase()}.$name"
 
 repositories {

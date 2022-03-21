@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 /**
  * Класс данных координат
  */
-@Data @NoArgsConstructor @EqualsAndHashCode @ToString
+@Data @EqualsAndHashCode @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Coordinates implements Comparable<Coordinates> {
 
@@ -24,13 +24,16 @@ public class Coordinates implements Comparable<Coordinates> {
     @XmlJavaTypeAdapter(Adapters.CoordinateYAdapter.class)
     private Float y;
 
+    private Coordinates() {
+        this.x = Adapters.DEFAULT_COORDINATE;
+        this.y = (float) Adapters.DEFAULT_COORDINATE;
+    }
+
     /**
      * Конструктор с параметрами
      *
      * @param x Координата X
      * @param y Координата Y
-     *
-     * @throws IllegalArgumentException Если Y меньше или равен -816
      */
     public Coordinates(float x, float y) {
         this.x = x;
@@ -41,13 +44,11 @@ public class Coordinates implements Comparable<Coordinates> {
      * Сеттер для поля y
      *
      * @param y Координата Y
-     *
-     * @throws IllegalArgumentException Если Y меньше или равен -816
      */
     public void setY(float y) {
         this.y = y;
         if (y <= -816)
-            this.y = 0F;
+            this.y = (float) Adapters.DEFAULT_COORDINATE;
     }
 
     private double distance() {

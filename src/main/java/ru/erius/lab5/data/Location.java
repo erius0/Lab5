@@ -6,7 +6,6 @@ import ru.erius.lab5.parser.Adapters;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Comparator;
 
 /**
@@ -16,7 +15,6 @@ import java.util.Comparator;
 @Data @EqualsAndHashCode @ToString
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Location implements Comparable<Location> {
-
     /**
      * Координата X типа double
      */
@@ -26,18 +24,20 @@ public class Location implements Comparable<Location> {
      */
     private float y;
     /**
-     * Координата Z типа Long, не может быть null
+     * Координата Z типа long, не может быть null
      */
-    private Long z;
+    private long z;
     /**
      * Имя локации, может быть null
      */
     @XmlElement(nillable = true)
-    @XmlJavaTypeAdapter(Adapters.NameAdapter.class)
     private String name;
 
     private Location() {
-        this.setName(this.name);
+        this.x = Adapters.DEFAULT_COORDINATE;
+        this.y = Adapters.DEFAULT_COORDINATE;
+        this.z = Adapters.DEFAULT_COORDINATE;
+        this.name = Adapters.DEFAULT_NAME;
     }
 
     /**
@@ -48,11 +48,9 @@ public class Location implements Comparable<Location> {
      * @param z Координата Z
      * @param name Имя локации
      *
-     * @throws IllegalArgumentException будет брошено, если name является пустой строкой
-     *
      * @throws NullPointerException будет брошено в случае, если Z является null
      */
-    public Location(double x, float y, @NonNull Long z, String name) {
+    public Location(double x, float y, long z, String name) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -62,13 +60,11 @@ public class Location implements Comparable<Location> {
     /**
      * Сеттер для поля name
      * @param name Имя локации
-     *
-     * @throws IllegalArgumentException Если name является пустой строкой
      */
     public void setName(String name) {
         this.name = name;
         if (name != null && name.isEmpty())
-            this.name = null;
+            this.name = Adapters.DEFAULT_NAME;
     }
 
     /**
