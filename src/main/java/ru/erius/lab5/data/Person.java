@@ -4,10 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import ru.erius.lab5.parser.HeightAdapter;
-import ru.erius.lab5.parser.LocalDateAdapter;
-import ru.erius.lab5.parser.NameAdapter;
-import ru.erius.lab5.parser.PassportAdapter;
+import ru.erius.lab5.parser.*;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -28,7 +25,6 @@ public class Person implements Comparable<Person> {
      */
     @XmlTransient
     private static long existingPeople = 0;
-
     /**
      * Id человека, не может быть null, значение поля должно быть больше 0,
      * значение этого поля должно быть уникальным, значение этого поля должно генерироваться автоматически
@@ -38,7 +34,7 @@ public class Person implements Comparable<Person> {
     /**
      * Имя человека, не может быть null, строка не может быть пустой
      */
-    @XmlJavaTypeAdapter(NameAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.NameAdapter.class)
     private String name;
     /**
      * Координаты человека, не может быть null
@@ -47,19 +43,19 @@ public class Person implements Comparable<Person> {
     /**
      * Дата создания объекта, не может быть null, значение этого поля должно генерироваться автоматически
      */
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.LocalDateAdapter.class)
     private LocalDate creationDate;
     /**
      * Рост человека, может быть null, значение поля должно быть больше 0
      */
     @XmlElement(nillable = true)
-    @XmlJavaTypeAdapter(HeightAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.HeightAdapter.class)
     private Integer height;
     /**
      * Номер паспорта человека, длина строки должна быть не меньше 8, поле может быть null
      */
     @XmlElement(nillable = true)
-    @XmlJavaTypeAdapter(PassportAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.PassportAdapter.class)
     private String passportID;
     /**
      * Цвет глаз человека, не может быть null

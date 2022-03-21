@@ -16,6 +16,7 @@ public class Lab5 {
             peopleDatabase.load();
         } catch (Database.DatabaseLoadFailedException e) {
             System.out.println(e.getMessage());
+            System.exit(-1);
         }
         PeopleDatabaseCommands.setPeopleDatabase(peopleDatabase);
 

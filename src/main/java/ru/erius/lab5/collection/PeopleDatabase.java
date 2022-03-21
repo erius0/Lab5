@@ -2,7 +2,7 @@ package ru.erius.lab5.collection;
 
 import lombok.Getter;
 import ru.erius.lab5.data.Person;
-import ru.erius.lab5.parser.LocalDateAdapter;
+import ru.erius.lab5.parser.Adapters;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,7 +40,7 @@ public class PeopleDatabase implements Database {
     @XmlElement(name = "person")
     private TreeSet<Person> collection = new TreeSet<>();
     @Getter
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.LocalDateAdapter.class)
     @XmlElement(name = "initDate")
     private LocalDate initDate = LocalDate.now();
 
@@ -71,28 +71,29 @@ public class PeopleDatabase implements Database {
         System.out.println("Инициализация коллекции из файла...");
 
         String path = System.getenv(ENV_VAR);
+        boolean envSet = true;
         if (path == null) {
-            errorMessage = "Не найдена переменная окружения LAB5_PATH";
-            throw new DatabaseLoadFailedException("Не найдена переменная окружения LAB5_PATH");
+            System.out.println("Не найдена переменная окружения LAB5_PATH, создание файла в директории jar файла");
+            path = ".";
+            envSet = false;
         }
         File file = new File(path);
 
-        if (!file.exists()) {
-            errorMessage = String.format("Файл %s не был найден. Поменяйте значение переменной окружения LAB5_PATH", path);
-            throw new DatabaseLoadFailedException(errorMessage);
+        if (!file.exists() && envSet) {
+            System.out.println("Файл " + file.getAbsolutePath() + " не был найден, создание файла в директории jar файла");
+            file = new File(".");
         }
         if (file.isDirectory())
-                file = createFile(file);
+            file = createFile(file);
         if (!file.canRead()) {
-            errorMessage = String.format("У вас нет прав на чтение файла %s", path);
+            errorMessage = String.format("У вас нет прав на чтение файла %s", file.getAbsolutePath());
             throw new DatabaseLoadFailedException(errorMessage);
         }
         if (!file.canWrite()) {
-            errorMessage = String.format("У вас нет прав на запись в файл %s", path);
+            errorMessage = String.format("У вас нет прав на запись в файл %s", file.getAbsolutePath());
             throw new DatabaseLoadFailedException(errorMessage);
         }
         this.file = file;
-        System.out.println("Файл успешно найден");
 
         try {
             Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -101,8 +102,7 @@ public class PeopleDatabase implements Database {
             this.initDate = pd.initDate;
             System.out.println("Инициализация успешно выполнена");
         } catch (JAXBException e) {
-            e.printStackTrace();
-            throw new DatabaseLoadFailedException("Не удалось загрузить коллекцию из файла %s, он пуст, либо нарушена структура xml", file.getPath(), e);
+            System.out.println("Не удалось загрузить коллекцию из файла " + file.getAbsolutePath() + ", он пуст, либо нарушена структура xml");
         }
     }
 
@@ -116,8 +116,17 @@ public class PeopleDatabase implements Database {
      */
     @Override
     public void save() throws Database.DatabaseSaveFailedException {
-        if (file == null || context == null)
-            throw new DatabaseSaveFailedException("Не удалось сохранить коллекцию, " + errorMessage);
+        if (!file.exists()) {
+            System.out.println("Файла " + file.getAbsolutePath() + " не существует, ");
+            boolean created;
+            try {
+                created = file.createNewFile();
+            } catch (IOException e) {
+
+            }
+            errorMessage = "Файла %s не существует, возможно он был удален";
+            throw new DatabaseSaveFailedException(errorMessage, file.getAbsolutePath());
+        }
         try {
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

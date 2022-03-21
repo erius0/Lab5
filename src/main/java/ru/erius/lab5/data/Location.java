@@ -1,7 +1,7 @@
 package ru.erius.lab5.data;
 
 import lombok.*;
-import ru.erius.lab5.parser.NameAdapter;
+import ru.erius.lab5.parser.Adapters;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,7 +33,7 @@ public class Location implements Comparable<Location> {
      * Имя локации, может быть null
      */
     @XmlElement(nillable = true)
-    @XmlJavaTypeAdapter(NameAdapter.class)
+    @XmlJavaTypeAdapter(Adapters.NameAdapter.class)
     private String name;
 
     private Location() {

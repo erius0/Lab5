@@ -1,12 +1,11 @@
 package ru.erius.lab5.data;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import ru.erius.lab5.parser.Adapters;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Класс данных координат
@@ -22,7 +21,8 @@ public class Coordinates implements Comparable<Coordinates> {
     /**
      * Координата Y типа float, значение должно быть больше -816
      */
-    private float y;
+    @XmlJavaTypeAdapter(Adapters.CoordinateYAdapter.class)
+    private Float y;
 
     /**
      * Конструктор с параметрами
