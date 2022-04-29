@@ -1,0 +1,15 @@
+add
+Sasha
+175
+2312131231
+brown
+japan
+2323
+443
+2
+Tokyo
+3.4
+-2
+execute_script script.txt
+show
+print_field_descending_location

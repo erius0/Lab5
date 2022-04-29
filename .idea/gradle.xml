@@ -9,6 +9,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Lab5Client" />
+            <option value="$PROJECT_DIR$/Lab5Core" />
+            <option value="$PROJECT_DIR$/Lab5Server" />
           </set>
         </option>
       </GradleProjectSettings>

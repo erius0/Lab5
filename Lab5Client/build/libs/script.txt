@@ -1,0 +1,18 @@
+show
+info
+add
+Gena
+124
+231323232
+black
+japan
+2
+3
+4
+Tokyo
+5
+6
+show
+execute_script script2.txt
+sum_of_height
+filter_contains_name e
