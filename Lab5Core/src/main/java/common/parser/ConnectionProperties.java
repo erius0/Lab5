@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 public final class ConnectionProperties {
 
-    private final static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
     private static final Logger logger = Logger.getLogger("Lab5");
+    private static final int DEFAULT_PORT = 1234;
+    private static final String DEFAULT_HOST = "localhost";
 
     static {
         File file = new File("connection.properties");
@@ -41,7 +43,7 @@ public final class ConnectionProperties {
         String result = properties.getProperty("hostname");
         if (result == null) {
             logger.severe("Свойство hostname не было найдено, используем значение по умолчанию localhost");
-            return "localhost";
+            return DEFAULT_HOST;
         } else return result;
     }
 
@@ -49,12 +51,12 @@ public final class ConnectionProperties {
         String resultStr = properties.getProperty("port");
         if (resultStr == null) {
             logger.severe("Свойство port не было найден, используем значение по умолчанию 1234");
-            return 1234;
+            return DEFAULT_PORT;
         }
         Integer result = UtilFunctions.intOrNull(resultStr);
         if (result == null) {
             logger.severe("Порт должен быть целым числом, используем значение по умолчанию 1234");
-            return 1234;
+            return DEFAULT_PORT;
         }
         return result;
     }
