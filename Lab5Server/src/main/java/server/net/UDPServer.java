@@ -2,8 +2,10 @@ package server.net;
 
 import common.collection.PeopleDatabase;
 import common.commandline.Executable;
+import common.commandline.Executables;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
+import common.commandline.response.Response;
 
 import java.io.*;
 import java.net.*;
@@ -51,10 +53,8 @@ public class UDPServer {
 
     public void send(CommandResult result, InetAddress address, int port) {
         byte[] buffer;
-        try (
-                ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream)
-        ) {
+        try (ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream()) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
             objectOutputStream.writeObject(result);
             buffer = byteOutputStream.toByteArray();
             DatagramPacket request = new DatagramPacket(buffer, buffer.length, address, port);
@@ -80,17 +80,21 @@ public class UDPServer {
             if (args[0] == null) args[0] = peopleDatabase;
             result = command.execute(args);
         } catch (IOException e) {
-            logger.info("Не удалось преобразовать полученные данные, данные были повреждены во время передачи");
-            result = new CommandResult(null, DefaultResponse.SERVER_ERROR);
+            logger.severe("Не удалось преобразовать полученные данные, данные были повреждены во время передачи");
+            Response response = DefaultResponse.SERVER_ERROR;
+            result = new CommandResult(response.getMsg(), response);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            logger.info("Не удалось преобразовать полученные данные, классов полученных объектов не существует");
-            result = new CommandResult(null, DefaultResponse.CLASS_NOT_FOUND);
+            logger.severe("Не удалось преобразовать полученные данные, классов полученных объектов не существует");
+            Response response = DefaultResponse.CLASS_NOT_FOUND;
+            result = new CommandResult(response.getMsg(), response);
         } catch (ClassCastException e) {
-            logger.info("Не удалось преобразовать полученные данные, ожидались объекты другого типа");
-            result = new CommandResult(null, DefaultResponse.TYPE_ERROR);
+            logger.severe("Не удалось преобразовать полученные данные, ожидались объекты другого типа");
+            Response response = DefaultResponse.TYPE_ERROR;
+            result = new CommandResult(response.getMsg(), response);
         }
-        logger.info("Команда выполнена, отправляем результат клиенту...");
+        logger.info("Команда выполнена, сохраняем результат и отправляем результат клиенту...");
+        Executables.SAVE.getExecutable().execute(new Object[]{ peopleDatabase });
         send(result, request.getAddress(), request.getPort());
     }
 }

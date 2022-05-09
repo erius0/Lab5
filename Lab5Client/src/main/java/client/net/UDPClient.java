@@ -45,10 +45,8 @@ public class UDPClient {
     public CommandResult send(Executable executable, Object[] args) {
         if (!available) return new CommandResult(null, DefaultResponse.HOST_NOT_FOUND);
         byte[] buffer;
-        try (
-                ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream)
-        ) {
+        try (ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream()) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
             objectOutputStream.writeObject(executable);
             objectOutputStream.writeObject(args);
             buffer = byteOutputStream.toByteArray();

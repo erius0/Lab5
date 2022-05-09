@@ -5,6 +5,7 @@ import common.collection.PeopleDatabase;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
 import common.commandline.response.PeopleDatabaseResponse;
+import common.commandline.response.Response;
 import common.data.Person;
 
 import java.util.Collections;
@@ -15,26 +16,30 @@ public enum Executables {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         Person person = (Person) args[1];
         boolean success = peopleDatabase.getCollection().add(person);
-        return new CommandResult(null, success ? DefaultResponse.OK : PeopleDatabaseResponse.FAILED_TO_ADD);
+        Response response = success ? DefaultResponse.OK : PeopleDatabaseResponse.FAILED_TO_ADD;
+        return new CommandResult(response.getMsg(), response);
     }),
     ADD_IF_MAX(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         Person person = (Person) args[1];
         Person last = peopleDatabase.getCollection().last();
         if (person.compareTo(last) > 0) return ADD.executable.execute(args);
-        return new CommandResult(null, PeopleDatabaseResponse.FAILED_TO_ADD);
+        Response response = PeopleDatabaseResponse.FAILED_TO_ADD;
+        return new CommandResult(response.getMsg(), response);
     }),
     ADD_IF_MIN(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         Person person = (Person) args[1];
         Person first = peopleDatabase.getCollection().first();
         if (person.compareTo(first) < 0) return ADD.executable.execute(args);
-        return new CommandResult(null, PeopleDatabaseResponse.FAILED_TO_ADD);
+        Response response = PeopleDatabaseResponse.FAILED_TO_ADD;
+        return new CommandResult(response.getMsg(), response);
     }),
     CLEAR(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         peopleDatabase.getCollection().clear();
-        return new CommandResult(null, DefaultResponse.OK);
+        Response response = DefaultResponse.OK;
+        return new CommandResult(response.getMsg(), response);
     }),
     FILTER_CONTAINS_NAME(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
@@ -64,13 +69,15 @@ public enum Executables {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         long id = (long) args[1];
         boolean success = peopleDatabase.getCollection().removeIf(p -> p.getId().equals(id));
-        return new CommandResult(null, success ? DefaultResponse.OK : PeopleDatabaseResponse.ELEMENT_NOT_FOUND);
+        Response response = success ? DefaultResponse.OK : PeopleDatabaseResponse.ELEMENT_NOT_FOUND;
+        return new CommandResult(response.getMsg(), response);
     }),
     SAVE(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         try {
             peopleDatabase.save();
-            return new CommandResult(null, DefaultResponse.OK);
+            Response response = DefaultResponse.OK;
+            return new CommandResult(response.getMsg(), response);
         } catch (Database.DatabaseSaveFailedException e) {
             return new CommandResult(e.getMessage(), PeopleDatabaseResponse.SAVE_FAILED);
         }
@@ -83,11 +90,11 @@ public enum Executables {
     }),
     SUM_OF_HEIGHT(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
-        int sum = peopleDatabase.getCollection()
+        String sum = "Сумма ростов всех людей в коллекции - " + peopleDatabase.getCollection()
                 .stream()
                 .mapToInt(p -> p.getHeight() == null ? 0 : p.getHeight())
                 .sum();
-        return new CommandResult("Сумма ростов всех людей в коллекции - " + sum, DefaultResponse.OK);
+        return new CommandResult(sum, DefaultResponse.OK);
     }),
     UPDATE(args -> {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
@@ -97,7 +104,8 @@ public enum Executables {
                 .stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
-        if (!optionalPerson.isPresent()) return new CommandResult(null, PeopleDatabaseResponse.ELEMENT_NOT_FOUND);
+        Response response = PeopleDatabaseResponse.ELEMENT_NOT_FOUND;
+        if (!optionalPerson.isPresent()) return new CommandResult(response.getMsg(), response);
         Person oldPerson = optionalPerson.get();
         CommandResult result = REMOVE_BY_ID.executable.execute(new Object[]{ peopleDatabase, id });
         if (result.getResponse() != DefaultResponse.OK) return result;

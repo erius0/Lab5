@@ -1,8 +1,10 @@
 package client.commandline;
 
 import client.net.UDPClient;
+import common.commandline.Executables;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
+import common.commandline.response.Response;
 import common.parser.ConnectionProperties;
 import common.util.UtilFunctions;
 
@@ -68,7 +70,7 @@ public final class CommandLineHandler {
                 System.out.flush();
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println("Что-то пошло не так");
         }
     }
 
@@ -92,11 +94,10 @@ public final class CommandLineHandler {
         }
         boolean argsValid = command.validate(args);
         if (!argsValid) return;
-        CommandResult result = command.isClientOnly() || clientMode ?
-                command.executeOnClient() : executeOnServer(udp, command);
+        boolean isClient = command.isClientOnly() || clientMode;
+        CommandResult result = isClient ? command.executeOnClient() : executeOnServer(udp, command);
         PrintStream ps = result.getResponse() == DefaultResponse.OK ? System.out : System.err;
-        if (result.getValue() == null) ps.println(result.getResponse().getMsg());
-        else ps.println(result.getValue());
+        ps.println(result.getValue());
         updateHistory(alias);
     }
 
@@ -243,18 +244,21 @@ public final class CommandLineHandler {
                     args -> {
                         String fileName = (String) args[0];
                         File file = new File(fileName);
-                        if (!file.exists() || file.isDirectory())
-                            return new CommandResult(null, DefaultResponse.FILE_NOT_FOUND);
+                        if (!file.exists() || file.isDirectory()) {
+                            Response response = DefaultResponse.FILE_NOT_FOUND;
+                            return new CommandResult(response.getMsg(), response);
+                        }
 
                         Reader streamReader;
                         try {
                             streamReader = new InputStreamReader(new FileInputStream(file));
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            return new CommandResult(null, DefaultResponse.UNKNOWN);
+                            Response response = DefaultResponse.UNKNOWN;
+                            return new CommandResult(response.getMsg(), response);
                         }
                         instance.addNewInput(streamReader, fileName);
-                        return new CommandResult(null, DefaultResponse.OK);
+                        Response response = DefaultResponse.OK;
+                        return new CommandResult(response.getMsg(), response);
                     });
         }
 
