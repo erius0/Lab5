@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public final class ConnectionProperties {
 
     private static final Properties properties = new Properties();
-    private static final Logger logger = Logger.getLogger("Lab5");
+    private static final Logger logger = UtilFunctions.getLogger(ConnectionProperties.class, "common");
     private static final int DEFAULT_PORT = 1234;
     private static final String DEFAULT_HOST = "localhost";
     private static final String FILE_NAME = "connection.properties";

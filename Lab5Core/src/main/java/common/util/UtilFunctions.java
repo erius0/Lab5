@@ -1,5 +1,11 @@
 package common.util;
 
+import java.util.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
 /**
  * Класс функций-утилит для избавления от повторяющихся участков кода и выноса их в методы для общего пользования
  */
@@ -53,5 +59,29 @@ public final class UtilFunctions {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public static Logger getLogger(Class<?> clazz, String mainLoggerName) {
+        changeLoggerFormat(mainLoggerName);
+        return Logger.getLogger(clazz.getName());
+    }
+
+    private static void changeLoggerFormat(String mainLoggerName) {
+        Logger mainLogger = Logger.getLogger(mainLoggerName);
+        mainLogger.setUseParentHandlers(false);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new SimpleFormatter() {
+            private static final String format = "[%1$tF %1$tT] [%s] %3$s %n";
+
+            @Override
+            public synchronized String format(LogRecord record) {
+                return String.format(format,
+                        new Date(record.getMillis()),
+                        record.getLevel().getLocalizedName(),
+                        record.getMessage()
+                );
+            }
+        });
+        mainLogger.addHandler(handler);
     }
 }
