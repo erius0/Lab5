@@ -1,10 +1,10 @@
 -classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\resources\\main;C:\\Users\\egor\\.gradle\\caches\\modules-2\\files-2.1\\org.projectlombok\\lombok\\1.18.22\\9c08ea24c6eb714e2d6170e8122c069a0ba9aacf\\lombok-1.18.22.jar'
 -d 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\docs\\javadoc'
--doctitle 'Lab5Core 2.0 API'
+-doctitle 'Lab5Core 2.1 API'
 -encoding 'UTF-8'
 -notimestamp 
 -quiet 
--windowtitle 'Lab5Core 2.0 API'
+-windowtitle 'Lab5Core 2.1 API'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\collection\\Database.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\collection\\PeopleDatabase.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\commandline\\Executable.java'

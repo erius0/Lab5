@@ -3,6 +3,7 @@ package common.parser;
 import common.util.UtilFunctions;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -13,18 +14,26 @@ public final class ConnectionProperties {
     private static final Logger logger = Logger.getLogger("Lab5");
     private static final int DEFAULT_PORT = 1234;
     private static final String DEFAULT_HOST = "localhost";
+    private static final String FILE_NAME = "connection.properties";
 
     static {
-        File file = new File("connection.properties");
+        File file = new File(FILE_NAME);
         try {
             if (file.exists()) {
                 logger.info("Файл найден, загружаем настройки подключения...");
-            }
-            else {
-                logger.warning("Файл не найден, создание файла " + file.getName());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(ConnectionProperties.class.getClassLoader().getResource("connection.properties").openStream()));
+            } else {
+                logger.warning("Файл не найден, создание файла " + FILE_NAME);
+                URL url = ConnectionProperties.class.getClassLoader().getResource(FILE_NAME);
+                if (url == null) {
+                    logger.severe("Jar файл поврежден, переустановите программу");
+                    System.exit(-1);
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
                 String content = reader.lines().collect(Collectors.joining("\n"));
-                file.createNewFile();
+                boolean wasCreated = file.createNewFile();
+                if (!wasCreated) {
+                    logger.severe("Невозможно создать файл " + FILE_NAME + ", недостаточно прав");
+                }
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file));
                 writer.write(content);
                 writer.close();
@@ -32,7 +41,7 @@ public final class ConnectionProperties {
                 logger.info("Файл создан, загружаем настройки подключения");
             }
             properties.load(new FileInputStream(file));
-            logger.info("Настройки подключения загружены из файла " + file.getName());
+            logger.info("Настройки подключения загружены из файла " + FILE_NAME);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -47,6 +56,17 @@ public final class ConnectionProperties {
         } else return result;
     }
 
+    public static void setHostname(String hostname) {
+        properties.setProperty("hostname", hostname);
+        File file = new File(FILE_NAME);
+        try (FileWriter writer = new FileWriter(file)) {
+            properties.store(writer, "Changed by user");
+            logger.info("Адрес успешно изменен");
+        } catch (IOException e) {
+            logger.severe("Не удалось сохранить измененные значения");
+        }
+    }
+
     public static int getPort() {
         String resultStr = properties.getProperty("port");
         if (resultStr == null) {
@@ -59,5 +79,16 @@ public final class ConnectionProperties {
             return DEFAULT_PORT;
         }
         return result;
+    }
+
+    public static void setPort(int port) {
+        properties.setProperty("port", String.valueOf(port));
+        File file = new File(FILE_NAME);
+        try (FileWriter writer = new FileWriter(file)) {
+            properties.store(writer, "Changed by user");
+            logger.info("Порт успешно изменен");
+        } catch (IOException e) {
+            logger.severe("Не удалось сохранить измененные значения");
+        }
     }
 }

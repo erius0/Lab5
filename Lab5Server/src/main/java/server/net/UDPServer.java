@@ -13,18 +13,12 @@ import java.util.logging.Logger;
 
 public class UDPServer {
 
-    private String hostname;
     private final int port;
     private DatagramSocket socket;
     private final Logger logger;
+    private final static int BUFFER_SIZE = 65_535;
 
     public UDPServer(int port, Logger logger) {
-        this.port = port;
-        this.logger = logger;
-    }
-
-    public UDPServer(String hostname, int port, Logger logger) {
-        this.hostname = hostname;
         this.port = port;
         this.logger = logger;
     }
@@ -32,15 +26,11 @@ public class UDPServer {
     public boolean connect() {
         logger.info("Подключаемся...");
         try {
-            InetAddress address = hostname == null ? InetAddress.getLocalHost() : InetAddress.getByName(hostname);
             socket = new DatagramSocket(port);
             logger.info("Подключение установлено");
             return true;
-        } catch (UnknownHostException e) {
-            logger.severe("Хост не найден");
-            return false;
         } catch (SocketException e) {
-            logger.severe("Не удалось открыть сокет");
+            logger.severe("Не удалось установить соединение, порт занят");
             return false;
         }
     }
@@ -59,15 +49,19 @@ public class UDPServer {
             buffer = byteOutputStream.toByteArray();
             DatagramPacket request = new DatagramPacket(buffer, buffer.length, address, port);
             socket.send(request);
+        } catch (SocketTimeoutException e) {
+            logger.severe("Не удалось отправить данные клиенту, клиент не отвечает");
+            return;
         } catch (IOException e) {
             logger.severe("Не удалось отправить данные клиенту, неполадки в соединении");
+            return;
         }
         logger.info("Результат отправлен клиенту");
     }
 
     public void receive(PeopleDatabase peopleDatabase) {
         logger.info("Ожидаем отправки данных от клиента...");
-        byte[] buffer = new byte[65535];
+        byte[] buffer = new byte[BUFFER_SIZE];
         DatagramPacket request = new DatagramPacket(buffer, buffer.length);
         CommandResult result;
         try (ByteArrayInputStream byteInputStream = new ByteArrayInputStream(buffer)) {
@@ -93,7 +87,7 @@ public class UDPServer {
             Response response = DefaultResponse.TYPE_ERROR;
             result = new CommandResult(response.getMsg(), response);
         }
-        logger.info("Команда выполнена, сохраняем результат и отправляем результат клиенту...");
+        logger.info("Команда выполнена, сохраняем и отправляем результат клиенту...");
         Executables.SAVE.getExecutable().execute(new Object[]{ peopleDatabase });
         send(result, request.getAddress(), request.getPort());
     }

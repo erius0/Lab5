@@ -11,6 +11,7 @@ public class Lab5Server {
 
     public final static Logger logger = Logger.getLogger("Lab5Server");
 
+
     public static void main(String[] args) {
         PeopleDatabase peopleDatabase = new PeopleDatabase(logger);
         try {
@@ -19,7 +20,7 @@ public class Lab5Server {
             System.out.println(e.getMessage());
             System.exit(-1);
         }
-        UDPServer udp = new UDPServer(ConnectionProperties.getHostname(), ConnectionProperties.getPort(), logger);
+        UDPServer udp = new UDPServer(ConnectionProperties.getPort(), logger);
         if (!udp.connect()) System.exit(-1);
         while (true)
             udp.receive(peopleDatabase);

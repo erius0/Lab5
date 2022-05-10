@@ -1,7 +1,6 @@
 package client.commandline;
 
 import client.net.UDPClient;
-import common.commandline.Executables;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
 import common.commandline.response.Response;
@@ -47,7 +46,7 @@ public final class CommandLineHandler {
     }
 
     private static void registerBasicCommands() {
-        CommandRegistry.registerCommands(new ExitCommand(), new HistoryCommand(), new ExecuteScriptCommand(), new ModeCommand());
+        CommandRegistry.registerCommands(new ExitCommand(), new HistoryCommand(), new ExecuteScriptCommand(), new ModeCommand(), new ConnectionCommand());
     }
 
     /**
@@ -281,13 +280,18 @@ public final class CommandLineHandler {
                         if (args.length == 0) {
                             result = "Программа работает в режиме клиент " + (instance.clientMode ? "" : "+ сервер");
                         } else {
-                            instance.clientMode = !instance.clientMode;
                             if (instance.clientMode) {
-                                result = "Режим работы сменен на клиент";
-                                instance.udp.disconnect();
-                            } else {
                                 result = "Режим работы сменен на клиент + сервер";
                                 instance.udp.connect();
+                                if (!instance.udp.isAvailable()) {
+                                    instance.udp.disconnect();
+                                    instance.clientMode = true;
+                                    return new CommandResult("Не удалось установить соединение с сервером", DefaultResponse.SERVER_ERROR);
+                                } else instance.clientMode = false;
+                            } else {
+                                result = "Режим работы сменен на клиент";
+                                instance.udp.disconnect();
+                                instance.clientMode = true;
                             }
                         }
                         return new CommandResult(result, DefaultResponse.OK);
@@ -299,6 +303,66 @@ public final class CommandLineHandler {
             if (args.length > 0 && args[0].equals("sw")) this.args = args;
             else this.args = new Object[]{};
             return true;
+        }
+    }
+
+    public static class ConnectionCommand extends Command {
+        public ConnectionCommand() {
+            super("con", true, "con [host|port] [value] : выводит информацию о сохраненных данных соединения с сервером, можно менять адрес или порт написав host или port и после них соответствующее значение",
+                    args -> {
+                        String result;
+                        if (args.length == 0) {
+                            result = String.format("Информация о соединении:\n\tАдрес - %s\n\tПорт - %d",
+                                    ConnectionProperties.getHostname(), ConnectionProperties.getPort());
+                            return new CommandResult(result, DefaultResponse.OK);
+                        } else {
+                            String change = (String) args[0];
+                            if (change.equals("host")) {
+                                String host = (String) args[1];
+                                ConnectionProperties.setHostname(host);
+                                instance.udp.setHostname(host);
+                                instance.udp.disconnect();
+                                instance.udp.connect();
+                                Response response = DefaultResponse.OK;
+                                return new CommandResult(response.getMsg(), response);
+                            } else {
+                                int port = (Integer) args[1];
+                                ConnectionProperties.setPort(port);
+                                instance.udp.setPort(port);
+                                instance.udp.disconnect();
+                                instance.udp.connect();
+                                Response response = DefaultResponse.OK;
+                                return new CommandResult(response.getMsg(), response);
+                            }
+                        }
+                    });
+        }
+
+        @Override
+        public boolean validate(String[] args) {
+            if (args.length == 0){
+                this.args = new Object[]{};
+                return true;
+            }
+            if (args.length < 2) {
+                System.err.println("Недостаточно аргументов");
+                return false;
+            }
+            String change = args[0].toLowerCase(Locale.ROOT);
+            if (change.equals("host")) {
+                this.args = new Object[]{ change, args[1] };
+                return true;
+            } else if (change.equals("port")) {
+                Integer port = UtilFunctions.intOrNull(args[1]);
+                if (port == null || port < 0 || port > 65535) {
+                    System.err.println("Порт должен быть целым числом от 0 до 65535");
+                    return false;
+                }
+                this.args = new Object[]{ change, port };
+                return true;
+            }
+            System.err.println("Неизвестное свойство " + args[0]);
+            return false;
         }
     }
 }

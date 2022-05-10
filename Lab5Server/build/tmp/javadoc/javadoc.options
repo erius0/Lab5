@@ -1,9 +1,9 @@
--classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\build\\resources\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\libs\\Lab5Core-2.0.jar'
+-classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\build\\resources\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\libs\\Lab5Core-2.1.jar'
 -d 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\build\\docs\\javadoc'
--doctitle 'Lab5Server 2.0 API'
+-doctitle 'Lab5Server 2.1 API'
 -encoding 'UTF-8'
 -notimestamp 
 -quiet 
--windowtitle 'Lab5Server 2.0 API'
+-windowtitle 'Lab5Server 2.1 API'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\src\\main\\java\\server\\Lab5Server.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Server\\src\\main\\java\\server\\net\\UDPServer.java'
