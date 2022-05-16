@@ -1,4 +1,4 @@
-package client.commandline;
+package common.commandline;
 
 public enum LongStrings {
     LINE("=================================================================================================="),

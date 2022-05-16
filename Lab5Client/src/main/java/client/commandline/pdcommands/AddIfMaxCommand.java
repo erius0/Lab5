@@ -1,6 +1,8 @@
 package client.commandline.pdcommands;
 
 import common.commandline.Executables;
+import common.commandline.pdcommands.PeopleDatabaseCommand;
+import common.commandline.pdcommands.PeopleDatabaseCommands;
 
 public class AddIfMaxCommand extends PeopleDatabaseCommand {
     public AddIfMaxCommand() {

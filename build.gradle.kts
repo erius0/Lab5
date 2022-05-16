@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "ru.erius.lab5"
-version = "2.1"
+version = "2.2"
 
 repositories {
     mavenCentral()

@@ -1,7 +1,6 @@
-package client.commandline.pdcommands;
+package common.commandline.pdcommands;
 
-import client.commandline.CommandLineHandler;
-import client.commandline.CommandRegistry;
+import common.commandline.CommandLineHandler;
 import common.collection.PeopleDatabase;
 import common.data.*;
 import common.util.UtilFunctions;
@@ -22,16 +21,6 @@ public final class PeopleDatabaseCommands {
     private static final CommandLineHandler CMD = CommandLineHandler.getInstance();
 
     private PeopleDatabaseCommands() {}
-
-    /**
-     * Метод добавления всех команд в регистр команд, обязательно вызывайте его в своей программе,
-     * если вам требуются данные команды
-     */
-    public static void registerDatabaseCommands() {
-        CommandRegistry.registerCommands(new InfoCommand(), new ShowCommand(), new AddCommand(), new AddIfMaxCommand(),
-                new AddIfMinCommand(), new ClearCommand(), new FilterContainsNameCommand(), new PrintFieldDescendingLocationCommand(),
-                new RemoveByIdCommand(), new SaveCommand(), new SumOfHeightCommand(), new UpdateCommand());
-    }
 
     public static Person createPerson() {
         System.out.println("Создание нового объекта класса Person");

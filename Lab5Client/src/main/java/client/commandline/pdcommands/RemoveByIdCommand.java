@@ -1,6 +1,7 @@
 package client.commandline.pdcommands;
 
 import common.commandline.Executables;
+import common.commandline.pdcommands.PeopleDatabaseCommand;
 import common.util.UtilFunctions;
 
 public class RemoveByIdCommand extends PeopleDatabaseCommand {

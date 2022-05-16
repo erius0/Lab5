@@ -1,6 +1,7 @@
 package client.commandline.pdcommands;
 
 import common.commandline.Executables;
+import common.commandline.pdcommands.PeopleDatabaseCommand;
 
 public class PrintFieldDescendingLocationCommand extends PeopleDatabaseCommand {
     public PrintFieldDescendingLocationCommand() {

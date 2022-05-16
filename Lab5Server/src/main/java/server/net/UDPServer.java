@@ -2,7 +2,6 @@ package server.net;
 
 import common.collection.PeopleDatabase;
 import common.commandline.Executable;
-import common.commandline.Executables;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
 import common.commandline.response.Response;
@@ -88,7 +87,6 @@ public class UDPServer {
             result = new CommandResult(response.getMsg(), response);
         }
         logger.info("Команда выполнена, сохраняем и отправляем результат клиенту...");
-        Executables.SAVE.getExecutable().execute(new Object[]{ peopleDatabase });
         send(result, request.getAddress(), request.getPort());
     }
 }

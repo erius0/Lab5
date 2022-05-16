@@ -1,6 +1,7 @@
 package client.commandline.pdcommands;
 
 import common.commandline.Executables;
+import common.commandline.pdcommands.PeopleDatabaseCommand;
 
 public class ShowCommand extends PeopleDatabaseCommand {
     public ShowCommand() {

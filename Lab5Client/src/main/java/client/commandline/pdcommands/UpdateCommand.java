@@ -1,6 +1,8 @@
 package client.commandline.pdcommands;
 
 import common.commandline.Executables;
+import common.commandline.pdcommands.PeopleDatabaseCommand;
+import common.commandline.pdcommands.PeopleDatabaseCommands;
 import common.util.UtilFunctions;
 
 public class UpdateCommand extends PeopleDatabaseCommand {

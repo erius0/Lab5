@@ -1,6 +1,6 @@
-package client.commandline.pdcommands;
+package common.commandline.pdcommands;
 
-import client.commandline.Command;
+import common.commandline.Command;
 import common.commandline.Executable;
 import common.commandline.response.CommandResult;
 import common.util.UtilFunctions;
@@ -8,6 +8,10 @@ import common.util.UtilFunctions;
 public abstract class PeopleDatabaseCommand extends Command {
     public PeopleDatabaseCommand(String alias, boolean clientOnly, String description, Executable executable) {
         super(alias, clientOnly, description, executable);
+    }
+
+    public PeopleDatabaseCommand(String alias, boolean clientOnly, String description) {
+        super(alias, clientOnly, description);
     }
 
     public CommandResult executeOnClient() {

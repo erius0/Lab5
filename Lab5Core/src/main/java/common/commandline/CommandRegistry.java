@@ -1,4 +1,4 @@
-package client.commandline;
+package common.commandline;
 
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
