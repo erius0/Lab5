@@ -1,9 +1,6 @@
 package common.data;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import common.parser.Adapters;
 
 import javax.xml.bind.annotation.*;
@@ -24,13 +21,13 @@ public class Person implements Comparable<Person>, Serializable {
      * Количество созданных людей, используется для задания
      * уникального id для каждого объекта данного класса
      */
-    @XmlTransient
+    @XmlTransient @Getter
     private static long existingPeople = 0;
     /**
      * Id человека, не может быть null, значение поля должно быть больше 0,
      * значение этого поля должно быть уникальным, значение этого поля должно генерироваться автоматически
      */
-    @XmlTransient
+    @XmlTransient @Setter
     private Long id;
     /**
      * Имя человека, не может быть null, строка не может быть пустой
@@ -103,7 +100,7 @@ public class Person implements Comparable<Person>, Serializable {
      */
     public Person(@NonNull String name, @NonNull Coordinates coordinates, Integer height, String passportID,
                   @NonNull Color eyeColor, @NonNull Country nationality, Location location) {
-        this.id = ++existingPeople;
+        this.id = existingPeople;
         this.creationDate = LocalDate.now();
         this.location = location;
         this.coordinates = coordinates;
@@ -128,6 +125,10 @@ public class Person implements Comparable<Person>, Serializable {
         this.setName(newPerson.name);
         this.setHeight(newPerson.height);
         this.setPassportID(newPerson.passportID);
+    }
+
+    public static void incrementExistingPeople() {
+        existingPeople++;
     }
 
     /**

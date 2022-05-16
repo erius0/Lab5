@@ -15,7 +15,12 @@ public enum Executables {
         PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
         Person person = (Person) args[1];
         boolean success = peopleDatabase.getCollection().add(person);
-        Response response = success ? DefaultResponse.OK : PeopleDatabaseResponse.FAILED_TO_ADD;
+        Response response = PeopleDatabaseResponse.FAILED_TO_ADD;
+        if (success) {
+            Person.incrementExistingPeople();
+            person.setId(Person.getExistingPeople());
+            response = DefaultResponse.OK;
+        }
         return new CommandResult(response.getMsg(), response);
     }),
 
