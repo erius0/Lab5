@@ -28,6 +28,8 @@ public class Lab5Server {
         UDPServer udp = new UDPServer(ConnectionProperties.getPort(), LOGGER);
         if (!udp.connect()) System.exit(-1);
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> cmd.save(peopleDatabase)));
+
         Thread thread = new Thread(() -> {
             while (true)
                 udp.receive(peopleDatabase);

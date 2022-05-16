@@ -176,13 +176,75 @@ public abstract class CommandLineHandler {
         this.reader = new BufferedReader(reader);
     }
 
+    public CommandResult executeScript(String fileName) {
+        return executeScript(new Object[]{ fileName });
+    }
+
+    private CommandResult executeScript(Object[] args) {
+        String fileName = (String) args[0];
+        File file = new File(fileName);
+        if (!file.exists() || file.isDirectory()) {
+            Response response = DefaultResponse.FILE_NOT_FOUND;
+            return new CommandResult(response.getMsg(), response);
+        }
+
+        Reader streamReader;
+        try {
+            streamReader = new InputStreamReader(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            Response response = DefaultResponse.UNKNOWN;
+            return new CommandResult(response.getMsg(), response);
+        }
+        addNewInput(streamReader, fileName);
+        Response response = DefaultResponse.OK;
+        return new CommandResult(response.getMsg(), response);
+    }
+
+    public CommandResult history() {
+        return history(new Object[]{});
+    }
+
+    public CommandResult history(int amount) {
+        return history(new Object[]{ amount });
+    }
+
+    private CommandResult history (Object[] args) {
+        int lines = args.length > 0 ? (int) args[0] : 6;
+        int start = lines < history.size() ? history.size() - lines : 0;
+        StringBuilder result = new StringBuilder("История последних команд:\n");
+        for (int i = start; i < history.size(); i++)
+            result.append(history.get(i)).append("\n");
+        return new CommandResult(result.toString(), DefaultResponse.OK);
+    }
+
+    public CommandResult exit() {
+        return exit(new Object[]{});
+    }
+
+    private CommandResult exit(Object[] args) {
+        isActive = false;
+        return new CommandResult("Выход из программы...", DefaultResponse.OK);
+    }
+
+    public CommandResult save(PeopleDatabase peopleDatabase) {
+        return save(new Object[]{ peopleDatabase });
+    }
+
+    private CommandResult save(Object[] args) {
+        PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
+        try {
+            peopleDatabase.save();
+            Response response = DefaultResponse.OK;
+            return new CommandResult(response.getMsg(), response);
+        } catch (Database.DatabaseSaveFailedException e) {
+            return new CommandResult(e.getMessage(), PeopleDatabaseResponse.SAVE_FAILED);
+        }
+    }
+
     public class ExitCommand extends Command {
         public ExitCommand() {
             super("exit", true, "exit : завершить программу (без сохранения в файл)");
-            this.executable = args -> {
-                isActive = false;
-                return new CommandResult("Выход из программы...", DefaultResponse.OK);
-            };
+            this.executable = CommandLineHandler.this::exit;
         }
 
         @Override
@@ -194,14 +256,7 @@ public abstract class CommandLineHandler {
     public class HistoryCommand extends Command {
         public HistoryCommand() {
             super("history", true, "history [count] : вывести последние count введенных команд, по умолчанию count равен 6");
-            this.executable = args -> {
-                int lines = args.length > 0 ? (int) args[0] : 6;
-                int start = lines < history.size() ? history.size() - lines : 0;
-                StringBuilder result = new StringBuilder("История последних команд:\n");
-                for (int i = start; i < history.size(); i++)
-                    result.append(history.get(i)).append("\n");
-                return new CommandResult(result.toString(), DefaultResponse.OK);
-            };
+            this.executable = CommandLineHandler.this::history;
         }
 
         @Override
@@ -222,25 +277,7 @@ public abstract class CommandLineHandler {
     public class ExecuteScriptCommand extends Command {
         public ExecuteScriptCommand() {
             super("execute_script", true, "execute_script {file_name} : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-            this.executable = args -> {
-                String fileName = (String) args[0];
-                File file = new File(fileName);
-                if (!file.exists() || file.isDirectory()) {
-                    Response response = DefaultResponse.FILE_NOT_FOUND;
-                    return new CommandResult(response.getMsg(), response);
-                }
-
-                Reader streamReader;
-                try {
-                    streamReader = new InputStreamReader(new FileInputStream(file));
-                } catch (FileNotFoundException e) {
-                    Response response = DefaultResponse.UNKNOWN;
-                    return new CommandResult(response.getMsg(), response);
-                }
-                addNewInput(streamReader, fileName);
-                Response response = DefaultResponse.OK;
-                return new CommandResult(response.getMsg(), response);
-            };
+            this.executable = CommandLineHandler.this::executeScript;
         }
 
         @Override
@@ -254,19 +291,10 @@ public abstract class CommandLineHandler {
         }
     }
 
-    public static class SaveCommand extends PeopleDatabaseCommand {
+    public class SaveCommand extends PeopleDatabaseCommand {
         public SaveCommand() {
             super("save", true, "save : сохранить коллекцию в файл");
-            this.executable = args -> {
-                PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
-                try {
-                    peopleDatabase.save();
-                    Response response = DefaultResponse.OK;
-                    return new CommandResult(response.getMsg(), response);
-                } catch (Database.DatabaseSaveFailedException e) {
-                    return new CommandResult(e.getMessage(), PeopleDatabaseResponse.SAVE_FAILED);
-                }
-            };
+            this.executable = CommandLineHandler.this::save;
         }
 
         @Override
