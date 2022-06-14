@@ -1,7 +1,7 @@
 package common.commandline.pdcommands;
 
 import common.commandline.CommandLineHandler;
-import common.collection.PeopleDatabase;
+import common.collection.PeopleCollection;
 import common.data.*;
 import common.util.UtilFunctions;
 
@@ -11,11 +11,11 @@ import java.util.Locale;
 /**
  * Класс объявления всех команд, связанных с манипуляциями над объектом класса PeopleDatabase
  *
- * @see PeopleDatabase
+ * @see PeopleCollection
  */
 public final class PeopleDatabaseCommands {
 
-    public static PeopleDatabase peopleDatabase;
+    public static PeopleCollection peopleCollection;
     private static final String COLORS = Arrays.toString(Color.values()),
                                 COUNTRIES = Arrays.toString(Country.values());
     private static final CommandLineHandler CMD = CommandLineHandler.getInstance();

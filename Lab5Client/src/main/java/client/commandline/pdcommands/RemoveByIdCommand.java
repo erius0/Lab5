@@ -7,7 +7,7 @@ import common.util.UtilFunctions;
 public class RemoveByIdCommand extends PeopleDatabaseCommand {
     public RemoveByIdCommand() {
         super("remove_by_id", false, "remove_by_id {id} : удалить элемент из коллекции по его {id}",
-                Executables.REMOVE_BY_ID.getExecutable());
+                Executables.REMOVE_BY_ID.executable);
     }
 
     @Override

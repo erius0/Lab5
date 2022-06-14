@@ -7,7 +7,7 @@ import common.commandline.pdcommands.PeopleDatabaseCommands;
 public class AddCommand extends PeopleDatabaseCommand {
     public AddCommand() {
         super("add", false, "add <Person> : добавить новый элемент в коллекцию",
-                Executables.ADD.getExecutable());
+                Executables.ADD.executable);
     }
 
     @Override

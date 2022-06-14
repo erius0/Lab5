@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "ru.erius.lab5"
-version = "2.2"
+version = "3.0"
 val mainClass = "client.Lab5Client"
 
 repositories {

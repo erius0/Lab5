@@ -6,7 +6,7 @@ import common.commandline.pdcommands.PeopleDatabaseCommand;
 public class ShowCommand extends PeopleDatabaseCommand {
     public ShowCommand() {
         super("show", false, "show : вывести в стандартный поток вывода все элементы коллекции в строковом представлении",
-                Executables.SHOW.getExecutable());
+                Executables.SHOW.executable);
     }
 
     @Override

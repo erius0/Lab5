@@ -1,11 +1,7 @@
 package common.commandline;
 
-import common.collection.Database;
-import common.collection.PeopleDatabase;
-import common.commandline.pdcommands.PeopleDatabaseCommand;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
-import common.commandline.response.PeopleDatabaseResponse;
 import common.commandline.response.Response;
 import common.util.UtilFunctions;
 
@@ -36,7 +32,7 @@ public abstract class CommandLineHandler {
 
     protected CommandLineHandler() {
         clearScreen();
-        CommandRegistry.registerCommands(new ExitCommand(), new HistoryCommand(), new ExecuteScriptCommand(), new SaveCommand());
+        CommandRegistry.registerCommands(new ExitCommand(), new HistoryCommand(), new ExecuteScriptCommand());
     }
 
     public static CommandLineHandler getInstance() {
@@ -100,7 +96,7 @@ public abstract class CommandLineHandler {
      *
      * @return Строка из потока ввода
      */
-    protected String awaitInput(String msg, String err) {
+    public String awaitInput(String msg, String err) {
         return awaitInput(msg, err, input -> true);
     }
 
@@ -226,21 +222,6 @@ public abstract class CommandLineHandler {
         return new CommandResult("Выход из программы...", DefaultResponse.OK);
     }
 
-    public CommandResult save(PeopleDatabase peopleDatabase) {
-        return save(new Object[]{ peopleDatabase });
-    }
-
-    private CommandResult save(Object[] args) {
-        PeopleDatabase peopleDatabase = (PeopleDatabase) args[0];
-        try {
-            peopleDatabase.save();
-            Response response = DefaultResponse.OK;
-            return new CommandResult(response.getMsg(), response);
-        } catch (Database.DatabaseSaveFailedException e) {
-            return new CommandResult(e.getMessage(), PeopleDatabaseResponse.SAVE_FAILED);
-        }
-    }
-
     public class ExitCommand extends Command {
         public ExitCommand() {
             super("exit", true, "exit : завершить программу (без сохранения в файл)");
@@ -287,19 +268,6 @@ public abstract class CommandLineHandler {
                 return false;
             }
             this.args = args;
-            return true;
-        }
-    }
-
-    public class SaveCommand extends PeopleDatabaseCommand {
-        public SaveCommand() {
-            super("save", true, "save : сохранить коллекцию в файл");
-            this.executable = CommandLineHandler.this::save;
-        }
-
-        @Override
-        public boolean validate(String[] args) {
-            this.args = new Object[]{ null };
             return true;
         }
     }

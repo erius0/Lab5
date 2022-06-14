@@ -1,11 +1,7 @@
 package common.data;
 
 import lombok.*;
-import common.parser.Adapters;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -14,7 +10,6 @@ import java.util.Comparator;
  * по имени и расстоянию до точки (0; 0; 0)
  */
 @Data @EqualsAndHashCode @ToString
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Location implements Comparable<Location>, Serializable {
     /**
      * Координата X типа double
@@ -31,15 +26,7 @@ public class Location implements Comparable<Location>, Serializable {
     /**
      * Имя локации, может быть null
      */
-    @XmlElement(nillable = true)
     private String name;
-
-    private Location() {
-        this.x = Adapters.DEFAULT_COORDINATE;
-        this.y = Adapters.DEFAULT_COORDINATE;
-        this.z = Adapters.DEFAULT_COORDINATE;
-        this.name = Adapters.DEFAULT_NAME;
-    }
 
     /**
      * Конструктор с параметрами
@@ -55,17 +42,7 @@ public class Location implements Comparable<Location>, Serializable {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.setName(name);
-    }
-
-    /**
-     * Сеттер для поля name
-     * @param name Имя локации
-     */
-    public void setName(String name) {
         this.name = name;
-        if (name != null && name.isEmpty())
-            this.name = Adapters.DEFAULT_NAME;
     }
 
     /**

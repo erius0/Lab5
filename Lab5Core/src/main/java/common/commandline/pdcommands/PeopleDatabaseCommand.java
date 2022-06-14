@@ -15,7 +15,7 @@ public abstract class PeopleDatabaseCommand extends Command {
     }
 
     public CommandResult executeOnClient() {
-        args[0] = PeopleDatabaseCommands.peopleDatabase;
+        args[0] = PeopleDatabaseCommands.peopleCollection;
         return super.executeOnClient();
     }
 

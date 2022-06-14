@@ -1,10 +1,10 @@
--classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\build\\resources\\main;C:\\Users\\egor\\.gradle\\caches\\modules-2\\files-2.1\\org.projectlombok\\lombok\\1.18.24\\13a394eed5c4f9efb2a6d956e2086f1d81e857d9\\lombok-1.18.24.jar;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\libs\\Lab5Core-2.2.jar'
+-classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\build\\resources\\main;C:\\Users\\egor\\.gradle\\caches\\modules-2\\files-2.1\\org.projectlombok\\lombok\\1.18.24\\13a394eed5c4f9efb2a6d956e2086f1d81e857d9\\lombok-1.18.24.jar;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\libs\\Lab5Core-3.0.jar'
 -d 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\build\\docs\\javadoc'
--doctitle 'Lab5Client 2.2 API'
+-doctitle 'Lab5Client 3.0 API'
 -encoding 'UTF-8'
 -notimestamp 
 -quiet 
--windowtitle 'Lab5Client 2.2 API'
+-windowtitle 'Lab5Client 3.0 API'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\src\\main\\java\\client\\commandline\\CommandLineHandlerClient.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\src\\main\\java\\client\\commandline\\pdcommands\\AddCommand.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Client\\src\\main\\java\\client\\commandline\\pdcommands\\AddIfMaxCommand.java'

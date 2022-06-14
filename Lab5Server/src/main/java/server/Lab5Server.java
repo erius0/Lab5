@@ -1,10 +1,9 @@
 package server;
 
-import common.collection.Database;
-import common.collection.PeopleDatabase;
+import common.collection.PeopleCollection;
 import common.commandline.CommandLineHandler;
 import common.commandline.pdcommands.PeopleDatabaseCommands;
-import common.parser.ConnectionProperties;
+import common.net.ConnectionProperties;
 import common.util.UtilFunctions;
 import server.commandline.CommandLineHandlerServer;
 import server.net.UDPServer;
@@ -16,27 +15,20 @@ public class Lab5Server {
     public final static Logger LOGGER = UtilFunctions.getLogger(Lab5Server.class, "server");
 
     public static void main(String[] args) {
-        PeopleDatabase peopleDatabase = new PeopleDatabase(LOGGER);
-        try {
-            peopleDatabase.load();
-        } catch (Database.DatabaseLoadFailedException e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
-        }
+        PeopleCollection peopleCollection = new PeopleCollection();
         CommandLineHandler cmd = CommandLineHandlerServer.getServerCommandLine();
-        PeopleDatabaseCommands.peopleDatabase = peopleDatabase;
+        PeopleDatabaseCommands.peopleCollection = peopleCollection;
         UDPServer udp = new UDPServer(ConnectionProperties.getPort(), LOGGER);
-        if (!udp.connect()) System.exit(-1);
+        udp.connect();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> cmd.save(peopleDatabase)));
-
-        Thread thread = new Thread(() -> {
-            while (true)
-                udp.receive(peopleDatabase);
-        });
-        thread.setDaemon(true);
-        thread.start();
+        Runtime.getRuntime().addShutdownHook(new Thread());
 
         cmd.start();
+
+        Thread thread = new Thread(() -> {
+            while (cmd.isActive())
+                udp.receive(peopleCollection);
+        });
+        thread.start();
     }
 }

@@ -6,7 +6,7 @@ import common.commandline.pdcommands.PeopleDatabaseCommand;
 public class InfoCommand extends PeopleDatabaseCommand {
     public InfoCommand() {
         super("info", false, "info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)",
-                Executables.INFO.getExecutable());
+                Executables.INFO.executable);
     }
 
     @Override

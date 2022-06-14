@@ -8,7 +8,7 @@ import common.commandline.CommandRegistry;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
 import common.commandline.response.Response;
-import common.parser.ConnectionProperties;
+import common.net.ConnectionProperties;
 import common.util.UtilFunctions;
 
 import java.io.*;
@@ -16,12 +16,11 @@ import java.util.Locale;
 
 public final class CommandLineHandlerClient extends CommandLineHandler {
 
-    private boolean clientMode = true;
     private final UDPClient udp = new UDPClient(ConnectionProperties.getHostname(), ConnectionProperties.getPort());
 
     private CommandLineHandlerClient() {
         super();
-        CommandRegistry.registerCommands(new ModeCommand(), new ConnectionCommand(), new InfoCommand(), new ShowCommand(), new AddCommand(), new AddIfMaxCommand(),
+        CommandRegistry.registerCommands(new ConnectionCommand(), new InfoCommand(), new ShowCommand(), new AddCommand(), new AddIfMaxCommand(),
                 new AddIfMinCommand(), new ClearCommand(), new FilterContainsNameCommand(), new PrintFieldDescendingLocationCommand(),
                 new RemoveByIdCommand(), new SumOfHeightCommand(), new UpdateCommand());
     }
@@ -39,8 +38,7 @@ public final class CommandLineHandlerClient extends CommandLineHandler {
         }
         boolean argsValid = command.validate(args);
         if (!argsValid) return;
-        boolean isClient = command.isClientOnly() || clientMode;
-        CommandResult result = isClient ? command.executeOnClient() : executeOnServer(udp, command);
+        CommandResult result = command.isClientOnly() ? command.executeOnClient() : executeOnServer(udp, command);
         PrintStream ps = result.getResponse() == DefaultResponse.OK ? System.out : System.err;
         ps.println(result.getValue());
         updateHistory(alias);
@@ -48,40 +46,6 @@ public final class CommandLineHandlerClient extends CommandLineHandler {
 
     public CommandResult executeOnServer(UDPClient udp, Command command) {
         return udp.send(command.getExecutable(), command.getArgs());
-    }
-
-    public class ModeCommand extends Command {
-        public ModeCommand() {
-            super("mode", true, "mode [sw] : выводит режим работы программы, если написать sw, меняет режим с серверного на клиентский или наоборот");
-            this.executable = args -> {
-                String result;
-                if (args.length == 0) {
-                    result = "Программа работает в режиме клиент " + (clientMode ? "" : "+ сервер");
-                } else {
-                    if (clientMode) {
-                        result = "Режим работы сменен на клиент + сервер";
-                        udp.connect();
-                        if (!udp.isAvailable()) {
-                            udp.disconnect();
-                            clientMode = true;
-                            return new CommandResult("Не удалось установить соединение с сервером", DefaultResponse.SERVER_ERROR);
-                        } else clientMode = false;
-                    } else {
-                        result = "Режим работы сменен на клиент";
-                        udp.disconnect();
-                        clientMode = true;
-                    }
-                }
-                return new CommandResult(result, DefaultResponse.OK);
-            };
-        }
-
-        @Override
-        public boolean validate(String[] args) {
-            if (args.length > 0 && args[0].equals("sw")) this.args = args;
-            else this.args = new Object[]{};
-            return true;
-        }
     }
 
     public class ConnectionCommand extends Command {

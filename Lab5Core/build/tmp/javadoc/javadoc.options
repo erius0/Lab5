@@ -1,11 +1,10 @@
 -classpath 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\classes\\java\\main;C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\resources\\main;C:\\Users\\egor\\.gradle\\caches\\modules-2\\files-2.1\\org.projectlombok\\lombok\\1.18.24\\13a394eed5c4f9efb2a6d956e2086f1d81e857d9\\lombok-1.18.24.jar'
 -d 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\build\\docs\\javadoc'
--doctitle 'Lab5Core 2.2 API'
+-doctitle 'Lab5Core 3.0 API'
 -encoding 'UTF-8'
 -notimestamp 
 -quiet 
--windowtitle 'Lab5Core 2.2 API'
-'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\collection\\Database.java'
+-windowtitle 'Lab5Core 3.0 API'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\collection\\PeopleDatabase.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\commandline\\Command.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\commandline\\CommandLineHandler.java'
@@ -24,6 +23,5 @@
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\data\\Country.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\data\\Location.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\data\\Person.java'
-'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\parser\\Adapters.java'
-'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\parser\\ConnectionProperties.java'
+'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\net\\ConnectionProperties.java'
 'C:\\Users\\egor\\IdeaProjects\\Lab5\\Lab5Core\\src\\main\\java\\common\\util\\UtilFunctions.java'

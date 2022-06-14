@@ -4,8 +4,9 @@ plugins {
 }
 
 group = "ru.erius.lab5"
-version = "2.2"
+version = "3.0"
 val mainClass = "server.Lab5Server"
+val psqlJar = "postgresql-42.4.0.jar"
 
 repositories {
     mavenCentral()
@@ -14,7 +15,9 @@ repositories {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    compileOnly(files("$buildDir/libs/$psqlJar"))
     implementation(project(":Lab5Core"))
+
 }
 
 tasks.getByName<Test>("test") {
@@ -30,11 +33,13 @@ tasks.javadoc {
 }
 
 tasks.shadowJar {
+    exclude(psqlJar)
     archiveClassifier.set("")
     manifest {
         attributes(
             "Manifest-Version" to "1.0",
-            "Main-Class" to mainClass
+            "Main-Class" to mainClass,
+            "Class-Path" to psqlJar
         )
     }
 }

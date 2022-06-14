@@ -6,7 +6,7 @@ import common.commandline.pdcommands.PeopleDatabaseCommand;
 public class ClearCommand extends PeopleDatabaseCommand {
     public ClearCommand() {
         super("clear", false, "clear : очистить коллекцию",
-                Executables.CLEAR.getExecutable());
+                Executables.CLEAR.executable);
     }
 
     @Override

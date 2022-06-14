@@ -8,7 +8,7 @@ import common.util.UtilFunctions;
 public class UpdateCommand extends PeopleDatabaseCommand {
     public UpdateCommand() {
         super("update", false, "update {id} <Person> : обновить значение элемента коллекции, {id} которого равен заданному",
-                Executables.UPDATE.getExecutable());
+                Executables.UPDATE.executable);
     }
 
     @Override
