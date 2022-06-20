@@ -4,6 +4,8 @@ import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
 import common.commandline.response.Response;
 import common.util.UtilFunctions;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
 import java.util.Deque;
@@ -22,6 +24,8 @@ import java.util.function.Predicate;
  */
 public abstract class CommandLineHandler {
 
+    @Setter @Getter
+    private static String user = "lab7";
     protected static CommandLineHandler instance;
 
     protected final Deque<Reader> inputs = new LinkedList<>();
@@ -30,8 +34,7 @@ public abstract class CommandLineHandler {
     protected BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     protected boolean isActive = false;
 
-    protected CommandLineHandler() {
-        clearScreen();
+    {
         CommandRegistry.registerCommands(new ExitCommand(), new HistoryCommand(), new ExecuteScriptCommand());
     }
 
@@ -51,7 +54,7 @@ public abstract class CommandLineHandler {
         } while (this.isActive);
     }
 
-    protected static void clearScreen() {
+    public static void clearScreen() {
         try {
             if (System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -65,7 +68,7 @@ public abstract class CommandLineHandler {
     }
 
     protected void input() {
-        String line = awaitInput("lab5>", "Что-то пошло не так").toLowerCase(Locale.ROOT);
+        String line = awaitInput(user + ">").toLowerCase(Locale.ROOT);
         String[] split = line.split("\\s+");
         String alias = split[0];
         String[] args = new String[]{};
@@ -84,6 +87,10 @@ public abstract class CommandLineHandler {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public String awaitInput(String msg) {
+        return awaitInput(msg, "Что-то пошло не так");
     }
 
     /**
@@ -154,6 +161,23 @@ public abstract class CommandLineHandler {
         return transform.apply(result);
     }
 
+    public String awaitPassword(String msg) {
+        Console console = System.console();
+        if (console == null) {
+            System.err.println("Не удалось получить консоль");
+            System.exit(-1);
+        }
+        do {
+            System.out.print(msg + " ");
+            char[] input = console.readPassword();
+            if (input == null || input.length == 0) {
+                System.err.println("Пароль не может быть пустым");
+                continue;
+            }
+            return new String(input);
+        } while (true);
+    }
+
     public void addNewInput(Reader reader, String filePath) {
         if (this.fileNames.contains(filePath)) {
             System.err.println("Замечена рекурсия, отмена смены потока");
@@ -172,103 +196,81 @@ public abstract class CommandLineHandler {
         this.reader = new BufferedReader(reader);
     }
 
-    public CommandResult executeScript(String fileName) {
-        return executeScript(new Object[]{ fileName });
-    }
-
-    private CommandResult executeScript(Object[] args) {
-        String fileName = (String) args[0];
-        File file = new File(fileName);
-        if (!file.exists() || file.isDirectory()) {
-            Response response = DefaultResponse.FILE_NOT_FOUND;
-            return new CommandResult(response.getMsg(), response);
-        }
-
-        Reader streamReader;
-        try {
-            streamReader = new InputStreamReader(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            Response response = DefaultResponse.UNKNOWN;
-            return new CommandResult(response.getMsg(), response);
-        }
-        addNewInput(streamReader, fileName);
-        Response response = DefaultResponse.OK;
-        return new CommandResult(response.getMsg(), response);
-    }
-
-    public CommandResult history() {
-        return history(new Object[]{});
-    }
-
-    public CommandResult history(int amount) {
-        return history(new Object[]{ amount });
-    }
-
-    private CommandResult history (Object[] args) {
-        int lines = args.length > 0 ? (int) args[0] : 6;
-        int start = lines < history.size() ? history.size() - lines : 0;
-        StringBuilder result = new StringBuilder("История последних команд:\n");
-        for (int i = start; i < history.size(); i++)
-            result.append(history.get(i)).append("\n");
-        return new CommandResult(result.toString(), DefaultResponse.OK);
-    }
-
-    public CommandResult exit() {
-        return exit(new Object[]{});
-    }
-
-    private CommandResult exit(Object[] args) {
-        isActive = false;
-        return new CommandResult("Выход из программы...", DefaultResponse.OK);
-    }
-
     public class ExitCommand extends Command {
         public ExitCommand() {
             super("exit", true, "exit : завершить программу (без сохранения в файл)");
-            this.executable = CommandLineHandler.this::exit;
         }
 
         @Override
-        public boolean validate(String[] args) {
-            return true;
+        public CommandResult execute(Object[] args) {
+            isActive = false;
+            return new CommandResult("Выход из программы...", DefaultResponse.OK);
         }
     }
 
     public class HistoryCommand extends Command {
         public HistoryCommand() {
             super("history", true, "history [count] : вывести последние count введенных команд, по умолчанию count равен 6");
-            this.executable = CommandLineHandler.this::history;
         }
 
         @Override
-        public boolean validate(String[] args) {
+        public Object[] validate(String[] args) {
             Integer value = 6;
-            this.args = new Object[]{ value };
+            Object[] newArgs = new Object[]{ value };
             if (args.length > 0) {
                 value = UtilFunctions.intOrNull(args[0]);
                 if (value != null) {
-                    this.args = new Object[]{ value };
-                    return true;
-                } else return false;
+                    newArgs = new Object[]{ value };
+                    return newArgs;
+                } else return null;
             }
-            return true;
+            return newArgs;
+        }
+
+        @Override
+        public CommandResult execute(Object[] args) {
+            int lines = args.length > 0 ? (int) args[0] : 6;
+            int start = lines < history.size() ? history.size() - lines : 0;
+            StringBuilder result = new StringBuilder("История последних команд:\n");
+            for (int i = start; i < history.size(); i++)
+                result.append(history.get(i)).append("\n");
+            return new CommandResult(result.toString(), DefaultResponse.OK);
         }
     }
 
     public class ExecuteScriptCommand extends Command {
         public ExecuteScriptCommand() {
             super("execute_script", true, "execute_script {file_name} : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-            this.executable = CommandLineHandler.this::executeScript;
         }
 
         @Override
-        public boolean validate(String[] args) {
+        public Object[] validate(String[] args) {
             if (args.length < 1) {
                 System.err.println("Недостаточно данных");
-                return false;
+                return null;
             }
-            this.args = args;
-            return true;
+            return args;
+        }
+
+        @Override
+        public CommandResult execute(Object[] args) {
+            String fileName = (String) args[0];
+            File file = new File(fileName);
+            if (!file.exists() || file.isDirectory()) {
+                Response response = DefaultResponse.FILE_NOT_FOUND;
+                return new CommandResult(response.getMsg(), response);
+            }
+
+            Reader streamReader;
+            try {
+                streamReader = new InputStreamReader(new FileInputStream(file));
+            } catch (FileNotFoundException e) {
+                Response response = DefaultResponse.UNKNOWN;
+                return new CommandResult(response.getMsg(), response);
+            }
+            addNewInput(streamReader, fileName);
+            Response response = DefaultResponse.OK;
+            return new CommandResult(response.getMsg(), response);
         }
     }
 

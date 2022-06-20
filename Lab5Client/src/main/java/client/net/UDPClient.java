@@ -1,26 +1,47 @@
 package client.net;
 
-import common.commandline.Executable;
+import client.commandline.CommandLineHandlerClient;
+import common.commandline.Command;
+import common.commandline.CommandLineHandler;
+import common.commandline.PlaceHolder;
+import common.commandline.commands.LogInCommand;
+import common.commandline.commands.SignUpCommand;
 import common.commandline.response.CommandResult;
 import common.commandline.response.DefaultResponse;
-import common.commandline.response.Response;
+import common.commandline.response.SqlResponse;
 
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.util.Base64;
+import java.util.Locale;
 
 public class UDPClient {
+
+    private static MessageDigest md;
+
+    static {
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("Алгоритм хеширования MD5 не найден");
+            System.exit(-1);
+        }
+    }
 
     private String hostname;
     private int port;
     private InetSocketAddress address;
     private DatagramChannel datagramChannel;
-    private boolean isAvailable = false;
     private final static String LOCALHOST = "localhost";
-    private final static int    BUFFER_SIZE = 65_535,
-                                TIMES_TO_TRY_READ = 10,
-                                READ_ATTEMPT_DELAY_MS = 500;
+    private final static int BUFFER_SIZE = 65_535,
+            TIMES_TO_TRY_READ = 10,
+            READ_ATTEMPT_DELAY_MS = 500;
 
     public UDPClient(int port) {
         this.port = port;
@@ -40,34 +61,75 @@ public class UDPClient {
             datagramChannel.configureBlocking(false);
             if (address.isUnresolved()) {
                 System.err.println("Адреса " + hostname + " не существует, укажите другой адрес");
-                return;
+                System.exit(-1);
             }
         } catch (SocketException e) {
             System.err.println("Указанный порт подключения занят, укажите другой порт");
+            System.exit(-1);
         } catch (IOException e) {
             System.err.println("Что-то пошло не так при соединении с сервером");
+            System.exit(-1);
         }
-        isAvailable = true;
+        this.logIn();
+    }
+
+    private void logIn() {
+        CommandLineHandler cmd = CommandLineHandlerClient.getClientCommandLine();
+        String signUpAnswer = cmd.awaitInput("Имеется ли у вас аккаунт? (Y - да, N - нет):");
+        boolean accExists = signUpAnswer.toLowerCase(Locale.ROOT).equals("y");
+        if (!accExists) signUp();
+        System.out.println("Вход в существующий аккаунт");
+        CommandResult result;
+        String login;
+        do {
+            login = cmd.awaitInput("Введите логин:", "Логин не может быть пустым", s -> !s.isEmpty());
+            String password = cmd.awaitPassword("Введите пароль:");
+            String passwordMD5 = encodePassword(password);
+            Command logIn = new LogInCommand();
+            Object[] args = new Object[]{login, passwordMD5, PlaceHolder.of(Connection.class)};
+            result = this.send(logIn, args);
+            System.out.println(result.getValue());
+        } while (result.getResponse() != SqlResponse.OK);
+        CommandLineHandler.setUser(login);
+        System.out.println("Вход выполнен, добро пожаловать, " + login);
+    }
+
+    private void signUp() {
+        CommandLineHandler cmd = CommandLineHandlerClient.getClientCommandLine();
+        System.out.println("Регистрация нового пользователя");
+        CommandResult result;
+        do {
+            String login = cmd.awaitInput("Введите логин:", "Логин не может быть пустым", s -> !s.isEmpty());
+            String password = cmd.awaitPassword("Введите пароль:");
+            String passwordMD5 = encodePassword(password);
+            Command signUp = new SignUpCommand();
+            Object[] args = new Object[]{login, passwordMD5, PlaceHolder.of(Connection.class)};
+            result = this.send(signUp, args);
+            System.out.println(result.getValue());
+        } while (result.getResponse() != SqlResponse.OK);
+        System.out.println("Аккаунт успешно создан");
+    }
+
+    private String encodePassword(String password) {
+        md.update(password.getBytes(StandardCharsets.UTF_8));
+        byte[] bytes = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte aByte : bytes) sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+        return sb.toString();
     }
 
     public void disconnect() {
-        if (!isAvailable) return;
         try {
             datagramChannel.close();
         } catch (IOException e) {
             System.err.println("Что-то пошло не так во время разрыва соединения с сервером");
         }
-        isAvailable = false;
     }
 
-    public CommandResult send(Executable executable, Object[] args) {
-        if (!isAvailable) {
-            Response response = DefaultResponse.HOST_NOT_FOUND;
-            return new CommandResult(response.getMsg(), response);
-        }
+    public CommandResult send(Command command, Object[] args) {
         try (ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream(BUFFER_SIZE)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOutputStream);
-            objectOutputStream.writeObject(executable);
+            objectOutputStream.writeObject(command);
             objectOutputStream.writeObject(args);
             ByteBuffer buffer = ByteBuffer.wrap(byteOutputStream.toByteArray());
             datagramChannel.send(buffer, address);
@@ -116,9 +178,5 @@ public class UDPClient {
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
     }
 }

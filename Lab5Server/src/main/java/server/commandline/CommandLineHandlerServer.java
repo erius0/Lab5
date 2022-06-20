@@ -15,7 +15,7 @@ public class CommandLineHandlerServer extends CommandLineHandler {
     }
 
     public static CommandLineHandler getServerCommandLine() {
-        instance = new CommandLineHandlerServer();
+        if (instance == null) instance = new CommandLineHandlerServer();
         return instance;
     }
 
@@ -25,9 +25,9 @@ public class CommandLineHandlerServer extends CommandLineHandler {
             System.err.println("Неизвестная команда " + alias + ", напишите help для отображения всех существующих команд");
             return;
         }
-        boolean argsValid = command.validate(args);
-        if (!argsValid) return;
-        CommandResult result = command.executeOnClient();
+        Object[] objArgs = command.validate(args);
+        if (objArgs == null) return;
+        CommandResult result = command.execute(objArgs);
         PrintStream ps = result.getResponse() == DefaultResponse.OK ? System.out : System.err;
         ps.println(result.getValue());
         updateHistory(alias);

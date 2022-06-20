@@ -49,6 +49,7 @@ public class Person implements Comparable<Person>, Serializable {
      * Местоположение человека, может быть null
      */
     private Location location;
+    private String owner;
 
     /**
      * Конструктор с параметрами
@@ -61,11 +62,12 @@ public class Person implements Comparable<Person>, Serializable {
      * @param eyeColor Цвет глаз человека
      * @param nationality Национальность человека
      * @param location Местоположение человека
+     * @param owner Создатель человека
      *
      * @throws NullPointerException Если name, coordinates, eyeColor или nationality являются null
      */
     public Person(long id, @NonNull String name, @NonNull Coordinates coordinates, Integer height, String passportID,
-                  @NonNull Color eyeColor, @NonNull Country nationality, Location location) {
+                  @NonNull Color eyeColor, @NonNull Country nationality, Location location, String owner) {
         this.id = id;
         this.creationDate = LocalDate.now();
         this.location = location;
@@ -75,11 +77,12 @@ public class Person implements Comparable<Person>, Serializable {
         this.name = name;
         this.height = height;
         this.passportID = passportID;
+        this.owner = owner;
     }
 
     public Person(@NonNull String name, @NonNull Coordinates coordinates, Integer height, String passportID,
-                  @NonNull Color eyeColor, @NonNull Country nationality, Location location) {
-        this(0, name, coordinates, height, passportID, eyeColor, nationality, location);
+                  @NonNull Color eyeColor, @NonNull Country nationality, Location location, String owner) {
+        this(0, name, coordinates, height, passportID, eyeColor, nationality, location, owner);
     }
 
     /**
@@ -113,10 +116,11 @@ public class Person implements Comparable<Person>, Serializable {
                         "\t\tZ: %s\n" +
                         "\tКоординаты:\n" +
                         "\t\tX: %s\n" +
-                        "\t\tY: %s\n",
+                        "\t\tY: %s\n" +
+                        "\tСоздатель: %s\n",
                         id, name, creationDate, height, passportID, eyeColor, nationality,
                         location.getName(), location.getX(), location.getY(), location.getZ(),
-                        coordinates.getX(), coordinates.getY());
+                        coordinates.getX(), coordinates.getY(), owner);
     }
 
     /**

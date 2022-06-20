@@ -1,5 +1,6 @@
 common.collection
 common.commandline
+common.commandline.commands
 common.commandline.pdcommands
 common.commandline.response
 common.data

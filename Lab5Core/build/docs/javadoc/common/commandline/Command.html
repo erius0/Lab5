@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":6};
+var methods = {"i0":6,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -111,7 +111,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../common/commandline/CommandLineHandler.ExecuteScriptCommand.html" title="class in common.commandline">CommandLineHandler.ExecuteScriptCommand</a>, <a href="../../common/commandline/CommandLineHandler.ExitCommand.html" title="class in common.commandline">CommandLineHandler.ExitCommand</a>, <a href="../../common/commandline/CommandLineHandler.HistoryCommand.html" title="class in common.commandline">CommandLineHandler.HistoryCommand</a>, <a href="../../common/commandline/CommandRegistry.HelpCommand.html" title="class in common.commandline">CommandRegistry.HelpCommand</a>, <a href="../../common/commandline/pdcommands/PeopleDatabaseCommand.html" title="class in common.commandline.pdcommands">PeopleDatabaseCommand</a></dd>
+<dd><a href="../../common/commandline/CommandLineHandler.ExecuteScriptCommand.html" title="class in common.commandline">CommandLineHandler.ExecuteScriptCommand</a>, <a href="../../common/commandline/CommandLineHandler.ExitCommand.html" title="class in common.commandline">CommandLineHandler.ExitCommand</a>, <a href="../../common/commandline/CommandLineHandler.HistoryCommand.html" title="class in common.commandline">CommandLineHandler.HistoryCommand</a>, <a href="../../common/commandline/CommandRegistry.HelpCommand.html" title="class in common.commandline">CommandRegistry.HelpCommand</a>, <a href="../../common/commandline/commands/LogInCommand.html" title="class in common.commandline.commands">LogInCommand</a>, <a href="../../common/commandline/pdcommands/PeopleDatabaseCommand.html" title="class in common.commandline.pdcommands">PeopleDatabaseCommand</a>, <a href="../../common/commandline/commands/SignUpCommand.html" title="class in common.commandline.commands">SignUpCommand</a></dd>
 </dl>
 <hr>
 <br>
@@ -145,20 +145,12 @@ implements java.io.Serializable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#alias">alias</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected java.lang.Object[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#args">args</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#clientOnly">clientOnly</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#description">description</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../common/commandline/Executable.html" title="interface in common.commandline">Executable</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#executable">executable</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -179,12 +171,6 @@ implements java.io.Serializable</pre>
        boolean&nbsp;clientOnly,
        java.lang.String&nbsp;description)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#Command-java.lang.String-boolean-java.lang.String-common.commandline.Executable-">Command</a></span>(java.lang.String&nbsp;alias,
-       boolean&nbsp;clientOnly,
-       java.lang.String&nbsp;description,
-       <a href="../../common/commandline/Executable.html" title="interface in common.commandline">Executable</a>&nbsp;executable)</code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -201,11 +187,11 @@ implements java.io.Serializable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#executeOnClient--">executeOnClient</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>abstract <a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#execute-java.lang.Object:A-">execute</a></span>(java.lang.Object[]&nbsp;args)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>abstract boolean</code></td>
+<td class="colFirst"><code>java.lang.Object[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/Command.html#validate-java.lang.String:A-">validate</a></span>(java.lang.String[]&nbsp;args)</code>&nbsp;</td>
 </tr>
 </table>
@@ -251,28 +237,10 @@ implements java.io.Serializable</pre>
 <a name="clientOnly">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>clientOnly</h4>
 <pre>protected final&nbsp;boolean clientOnly</pre>
-</li>
-</ul>
-<a name="executable">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>executable</h4>
-<pre>protected&nbsp;<a href="../../common/commandline/Executable.html" title="interface in common.commandline">Executable</a> executable</pre>
-</li>
-</ul>
-<a name="args">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>args</h4>
-<pre>protected&nbsp;java.lang.Object[] args</pre>
 </li>
 </ul>
 </li>
@@ -286,24 +254,12 @@ implements java.io.Serializable</pre>
 <a name="Command-java.lang.String-boolean-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Command</h4>
-<pre>public&nbsp;Command(java.lang.String&nbsp;alias,
-               boolean&nbsp;clientOnly,
-               java.lang.String&nbsp;description)</pre>
-</li>
-</ul>
-<a name="Command-java.lang.String-boolean-java.lang.String-common.commandline.Executable-">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Command</h4>
 <pre>public&nbsp;Command(java.lang.String&nbsp;alias,
                boolean&nbsp;clientOnly,
-               java.lang.String&nbsp;description,
-               <a href="../../common/commandline/Executable.html" title="interface in common.commandline">Executable</a>&nbsp;executable)</pre>
+               java.lang.String&nbsp;description)</pre>
 </li>
 </ul>
 </li>
@@ -320,16 +276,16 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>validate</h4>
-<pre>public abstract&nbsp;boolean&nbsp;validate(java.lang.String[]&nbsp;args)</pre>
+<pre>public&nbsp;java.lang.Object[]&nbsp;validate(java.lang.String[]&nbsp;args)</pre>
 </li>
 </ul>
-<a name="executeOnClient--">
+<a name="execute-java.lang.Object:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>executeOnClient</h4>
-<pre>public&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;executeOnClient()</pre>
+<h4>execute</h4>
+<pre>public abstract&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;execute(java.lang.Object[]&nbsp;args)</pre>
 </li>
 </ul>
 </li>

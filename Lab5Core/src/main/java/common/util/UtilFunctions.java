@@ -1,6 +1,7 @@
 package common.util;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -61,9 +62,21 @@ public final class UtilFunctions {
         }
     }
 
+    public static Object[] appendObjects(Object[] array, Object... objects) {
+        int newSize = array.length + objects.length;
+        Object[] newArray = new Object[newSize];
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        System.arraycopy(objects, 0, newArray, array.length, objects.length);
+        return newArray;
+    }
+
     public static Logger getLogger(Class<?> clazz, String mainLoggerName) {
         changeLoggerFormat(mainLoggerName);
         return Logger.getLogger(clazz.getName());
+    }
+
+    public static String allLowerFirstCapital(String str) {
+        return str.substring(0, 1).toUpperCase(Locale.ROOT) + str.substring(1).toLowerCase(Locale.ROOT);
     }
 
     private static void changeLoggerFormat(String mainLoggerName) {

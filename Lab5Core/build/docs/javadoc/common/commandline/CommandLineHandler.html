@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":6,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":6,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -201,12 +201,10 @@ extends java.lang.Object</pre>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Modifier</th>
-<th class="colLast" scope="col">Constructor and Description</th>
+<th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#CommandLineHandler--">CommandLineHandler</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#CommandLineHandler--">CommandLineHandler</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -230,6 +228,10 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#awaitInput-java.lang.String-">awaitInput</a></span>(java.lang.String&nbsp;msg)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#awaitInput-java.lang.String-java.lang.String-">awaitInput</a></span>(java.lang.String&nbsp;msg,
           java.lang.String&nbsp;err)</code>
 <div class="block">Метод, ожидающий ввода из потока ввода <a href="../../common/commandline/CommandLineHandler.html#reader"><code>reader</code></a> и возвращающий результат,
@@ -237,7 +239,7 @@ extends java.lang.Object</pre>
  печатает ошибку err, если при вводе данных произошла ошибка</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#awaitInput-java.lang.String-java.lang.String-java.util.function.Predicate-">awaitInput</a></span>(java.lang.String&nbsp;msg,
           java.lang.String&nbsp;err,
@@ -247,7 +249,7 @@ extends java.lang.Object</pre>
  печатает ошибку err, если введенные данные не соответствуют предикату predicate</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#awaitInput-java.lang.String-java.lang.String-java.util.function.Predicate-java.util.function.Function-">awaitInput</a></span>(java.lang.String&nbsp;msg,
           java.lang.String&nbsp;err,
@@ -259,54 +261,42 @@ extends java.lang.Object</pre>
  преобразует результат в тип T в соответствии с функцией transform</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>protected static void</code></td>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#awaitPassword-java.lang.String-">awaitPassword</a></span>(java.lang.String&nbsp;msg)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#clearScreen--">clearScreen</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#executeCommand-java.lang.String-java.lang.String:A-">executeCommand</a></span>(java.lang.String&nbsp;alias,
               java.lang.String[]&nbsp;args)</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#executeScript-java.lang.String-">executeScript</a></span>(java.lang.String&nbsp;fileName)</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#exit--">exit</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../common/commandline/CommandLineHandler.html" title="class in common.commandline">CommandLineHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#getInstance--">getInstance</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code><a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#history--">history</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code><a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#history-int-">history</a></span>(int&nbsp;amount)</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#input--">input</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#isActive--">isActive</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#removeInput--">removeInput</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#start--">start</a></span>()</code>
 <div class="block">Метод, запускающий обработчик командной строки, для остановки требуется ввести команду "exit"</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../common/commandline/CommandLineHandler.html#updateHistory-java.lang.String-">updateHistory</a></span>(java.lang.String&nbsp;command)</code>&nbsp;</td>
 </tr>
@@ -400,7 +390,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CommandLineHandler</h4>
-<pre>protected&nbsp;CommandLineHandler()</pre>
+<pre>public&nbsp;CommandLineHandler()</pre>
 </li>
 </ul>
 </li>
@@ -436,7 +426,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>clearScreen</h4>
-<pre>protected static&nbsp;void&nbsp;clearScreen()</pre>
+<pre>public static&nbsp;void&nbsp;clearScreen()</pre>
 </li>
 </ul>
 <a name="input--">
@@ -474,6 +464,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>isActive</h4>
 <pre>public&nbsp;boolean&nbsp;isActive()</pre>
+</li>
+</ul>
+<a name="awaitInput-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>awaitInput</h4>
+<pre>public&nbsp;java.lang.String&nbsp;awaitInput(java.lang.String&nbsp;msg)</pre>
 </li>
 </ul>
 <a name="awaitInput-java.lang.String-java.lang.String-">
@@ -545,6 +544,15 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
+<a name="awaitPassword-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>awaitPassword</h4>
+<pre>public&nbsp;java.lang.String&nbsp;awaitPassword(java.lang.String&nbsp;msg)</pre>
+</li>
+</ul>
 <a name="addNewInput-java.io.Reader-java.lang.String-">
 <!--   -->
 </a>
@@ -558,46 +566,10 @@ extends java.lang.Object</pre>
 <a name="removeInput--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>removeInput</h4>
 <pre>public&nbsp;void&nbsp;removeInput()</pre>
-</li>
-</ul>
-<a name="executeScript-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>executeScript</h4>
-<pre>public&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;executeScript(java.lang.String&nbsp;fileName)</pre>
-</li>
-</ul>
-<a name="history--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>history</h4>
-<pre>public&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;history()</pre>
-</li>
-</ul>
-<a name="history-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>history</h4>
-<pre>public&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;history(int&nbsp;amount)</pre>
-</li>
-</ul>
-<a name="exit--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>exit</h4>
-<pre>public&nbsp;<a href="../../common/commandline/response/CommandResult.html" title="class in common.commandline.response">CommandResult</a>&nbsp;exit()</pre>
 </li>
 </ul>
 </li>

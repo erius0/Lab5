@@ -8,7 +8,7 @@ public enum DefaultResponse implements Response {
     SERVER_ERROR("Ошибка при связи по сетевому каналу"),
     CLASS_NOT_FOUND("Класс не найден"),
     TYPE_ERROR("Получен ответ не того типа"),
-    HOST_NOT_FOUND("Хоста не существует"),
+    HOST_NOT_FOUND("Сервер не найден"),
     UNKNOWN("Неизвестная ошибка");
 
     private final String msg;

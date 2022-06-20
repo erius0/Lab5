@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -154,10 +154,14 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../server/net/UDPServer.html#disconnect--">disconnect</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../server/net/UDPServer.html#receive-common.collection.PeopleDatabase-">receive</a></span>(common.collection.PeopleDatabase&nbsp;peopleDatabase)</code>&nbsp;</td>
+<td class="colFirst"><code>common.collection.PeopleCollection</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../server/net/UDPServer.html#loadFromDatabase--">loadFromDatabase</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../server/net/UDPServer.html#receive--">receive</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../server/net/UDPServer.html#send-common.commandline.response.CommandResult-java.net.InetAddress-int-">send</a></span>(common.commandline.response.CommandResult&nbsp;result,
     java.net.InetAddress&nbsp;address,
@@ -232,13 +236,27 @@ extends java.lang.Object</pre>
                  int&nbsp;port)</pre>
 </li>
 </ul>
-<a name="receive-common.collection.PeopleDatabase-">
+<a name="receive--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>receive</h4>
+<pre>public&nbsp;void&nbsp;receive()</pre>
+</li>
+</ul>
+<a name="loadFromDatabase--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>receive</h4>
-<pre>public&nbsp;void&nbsp;receive(common.collection.PeopleDatabase&nbsp;peopleDatabase)</pre>
+<h4>loadFromDatabase</h4>
+<pre>public&nbsp;common.collection.PeopleCollection&nbsp;loadFromDatabase()
+                                                    throws java.sql.SQLException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.sql.SQLException</code></dd>
+</dl>
 </li>
 </ul>
 </li>

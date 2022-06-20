@@ -14,9 +14,9 @@ public class PeopleCollection {
     private final static String TYPE = "TreeSet";
 
     @Getter
-    private NavigableSet<Person> collection = Collections.synchronizedNavigableSet(new TreeSet<>());
+    private final NavigableSet<Person> collection = Collections.synchronizedNavigableSet(new TreeSet<>());
     @Getter
-    private LocalDate initDate = LocalDate.now();
+    private final LocalDate initDate = LocalDate.now();
 
     public String info() {
         return String.format("Тип коллекции: %s \n" +

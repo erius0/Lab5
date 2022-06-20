@@ -71,21 +71,18 @@ public final class CommandRegistry {
 
     public static class HelpCommand extends Command {
         public HelpCommand() {
-            super("help", true, "help : вывести справку по доступным командам",
-                    args -> {
-                        StringBuilder result = new StringBuilder(LongStrings.LINE.getValue() + "\n\n");
-                        for (Command c : COMMANDS.values()) {
-                            String desc = c.getDescription();
-                            if (desc != null) result.append(desc).append("\n\n");
-                        }
-                        result.append(LongStrings.LINE.getValue());
-                        return new CommandResult(result.toString(), DefaultResponse.OK);
-                    });
+            super("help", true, "help : вывести справку по доступным командам");
         }
 
         @Override
-        public boolean validate(String[] args) {
-            return true;
+        public CommandResult execute(Object[] args) {
+            StringBuilder result = new StringBuilder(LongStrings.LINE.getValue() + "\n\n");
+            for (Command c : COMMANDS.values()) {
+                String desc = c.getDescription();
+                if (desc != null) result.append(desc).append("\n\n");
+            }
+            result.append(LongStrings.LINE.getValue());
+            return new CommandResult(result.toString(), DefaultResponse.OK);
         }
     }
 }
